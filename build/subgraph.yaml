@@ -1,13 +1,13 @@
 specVersion: 0.0.3
 schema:
-  file: ./schema.graphql
+  file: schema.graphql
 dataSources:
   - kind: ethereum/contract
     name: TicketLand
     network: mumbai
     source:
       startBlock: 21531031
-      address: '0x5d63e9Ede241B3900aF941A2a95432b38ac5b22B'
+      address: "0x5d63e9Ede241B3900aF941A2a95432b38ac5b22B"
       abi: TicketLand
     mapping:
       kind: ethereum/events
@@ -17,19 +17,19 @@ dataSources:
         - NFT
       abis:
         - name: TicketLand
-          file: ./abis/TicketLand.json
+          file: TicketLand/abis/TicketLand.json
       eventHandlers:
         - event: RoleGranted(indexed bytes32,indexed address,indexed address)
           handler: handleRoleGranted
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer
-      file: ./src/maps/TicketLand.ts
+      file: TicketLand/TicketLand.wasm
   - kind: ethereum/contract
     name: VipLand
     network: mumbai
     source:
       startBlock: 21531031
-      address: '0x5d63e9Ede241B3900aF941A2a95432b38ac5b22B'
+      address: "0x5d63e9Ede241B3900aF941A2a95432b38ac5b22B"
       abi: VipLand
     mapping:
       kind: ethereum/events
@@ -39,19 +39,19 @@ dataSources:
         - NFT
       abis:
         - name: VipLand
-          file: ./abis/VipLand.json
+          file: VipLand/abis/VipLand.json
       eventHandlers:
         - event: RoleGranted(indexed bytes32,indexed address,indexed address)
           handler: handleRoleGranted
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer
-      file: ./src/maps/VipLand.ts
+      file: VipLand/VipLand.wasm
   - kind: ethereum/contract
     name: NFTFactory
     network: mumbai
     source:
       startBlock: 21531031
-      address: '0xA04fC29C1d6be4739894444d7E51B78722132E7B'
+      address: "0xA04fC29C1d6be4739894444d7E51B78722132E7B"
       abi: NFTFactory
     mapping:
       kind: ethereum/events
@@ -61,17 +61,17 @@ dataSources:
         - Directory
       abis:
         - name: NFTFactory
-          file: ./abis/NFTFactory.json
+          file: NFTFactory/abis/NFTFactory.json
       eventHandlers:
         - event: NFTSupportCreate(address,address,uint256)
           handler: handleNFTSupportCreate
-      file: ./src/maps/NFTFactory.ts
+      file: NFTFactory/NFTFactory.wasm
   - kind: ethereum/contract
     name: NFTStore
     network: mumbai
     source:
       startBlock: 21531031
-      address: '0x3dC42C7df45A1314fD380F03f9F351F99c25A172'
+      address: "0x3dC42C7df45A1314fD380F03f9F351F99c25A172"
       abi: NFTStore
     mapping:
       kind: ethereum/events
@@ -81,13 +81,13 @@ dataSources:
         - NFTStoreItem
       abis:
         - name: NFTStore
-          file: ./abis/NFTStore.json
+          file: NFTStore/abis/NFTStore.json
         - name: TicketLand
-          file: ./abis/TicketLand.json
+          file: NFTStore/abis/TicketLand.json
         - name: VipLand
-          file: ./abis/VipLand.json
+          file: NFTStore/abis/VipLand.json
         - name: NFTWithRarity
-          file: ./abis/NFTWithRarity.json
+          file: NFTStore/abis/NFTWithRarity.json
       eventHandlers:
         - event: NFTBuyed(indexed uint256,indexed address,address,uint256)
           handler: handleNFTBuyed
@@ -97,13 +97,13 @@ dataSources:
           handler: handleNFTDelete
         - event: NFTIdPoolUpdate(indexed uint256,indexed address,uint256)
           handler: handleNFTIdPoolUpdate
-      file: ./src/maps/NFTStore.ts
+      file: NFTStore/NFTStore.wasm
   - kind: ethereum/contract
     name: Marketplace
     network: mumbai
     source:
       startBlock: 21531031
-      address: '0x90620D1a6B2B0ea4715B48338d34613CF272E7a8'
+      address: "0x90620D1a6B2B0ea4715B48338d34613CF272E7a8"
       abi: Marketplace
     mapping:
       kind: ethereum/events
@@ -113,17 +113,18 @@ dataSources:
         - Order
       abis:
         - name: Marketplace
-          file: ./abis/Marketplace.json
+          file: Marketplace/abis/Marketplace.json
         - name: TicketLand
-          file: ./abis/TicketLand.json
+          file: Marketplace/abis/TicketLand.json
         - name: VipLand
-          file: ./abis/VipLand.json
+          file: Marketplace/abis/VipLand.json
         - name: NFTWithRarity
-          file: ./abis/NFTWithRarity.json
+          file: Marketplace/abis/NFTWithRarity.json
       eventHandlers:
         - event: OrderCreated(bytes32,indexed uint256,indexed address,address,uint256,uint256)
           handler: handleOrderCreated
-        - event: OrderSuccessful(bytes32,indexed uint256,indexed address,address,uint256,indexed address)
+        - event: OrderSuccessful(bytes32,indexed uint256,indexed address,address,uint256,indexed
+            address)
           handler: handleOrderSuccessful
         - event: OrderCancelled(bytes32,indexed uint256,indexed address,address)
           handler: handleOrderCancelled
@@ -131,7 +132,7 @@ dataSources:
           handler: handleChangedPublicationFee
         - event: ChangedOwnerCutPerMillion(uint256)
           handler: handleChangedOwnerCutPerMillion
-      file: ./src/maps/Marketplace.ts
+      file: Marketplace/Marketplace.wasm
 templates:
   - name: NFTWithRarity
     kind: ethereum/contract
@@ -142,12 +143,12 @@ templates:
       kind: ethereum/events
       apiVersion: 0.0.4
       language: wasm/assemblyscript
-      file: ./src/maps/NFT.ts
+      file: templates/NFTWithRarity/NFTWithRarity.wasm
       entities:
         - NFTWithRarity
       abis:
         - name: NFTWithRarity
-          file: ./abis/NFTWithRarity.json
+          file: NFTWithRarity/abis/NFTWithRarity.json
       eventHandlers:
         - event: RoleGranted(indexed bytes32,indexed address,indexed address)
           handler: handleRoleGranted

@@ -1,0 +1,9 @@
+{
+    "network": "mumbai",
+    "VipLand_address": "0x22a0FA166eDC1B0486870deBCc93e7c0DD2baC98",
+    "TicketLand_address": "0x22a0FA166eDC1B0486870deBCc93e7c0DD2baC98",
+    "NFTStore_address": "0x840d87BF609978f0AeEE578FB5039227F11319eC",
+    "Marketplace_address": "0x3687EE6B6132Ff0AB65527948DF29e9066d799E2",
+    "NFTFactory_address": "0x604348A1C08C82b40fA614021075263885B6cc2B",
+    "start_block": "0"
+}
