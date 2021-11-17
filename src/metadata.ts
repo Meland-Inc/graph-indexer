@@ -95,7 +95,7 @@ export function buildMetadata(nftAddress: Address, tokenId: BigInt): Metadata {
 	}
 
 	if (isTicketLand(symbol)) {
-		metadata.tikcetland = buildTicketLand(nftAddress, tokenId).id;
+		metadata.ticketland = buildTicketLand(nftAddress, tokenId).id;
 	}
 	metadata.itemType = itemType;
 	metadata.save();

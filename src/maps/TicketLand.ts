@@ -12,7 +12,7 @@ export function handleTransfer(event: Transfer): void {
     // 如果nft被转移，并且activeOrder不为null
     // 并且from跟order的creator不是一个人
     // 则将order cancel
-    const order = Order.load(nft.activeOrder);
+    let order = Order.load(nft.activeOrder);
     order.status = OrderStatus_cancelled;
     order.save();
 }

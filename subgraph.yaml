@@ -18,6 +18,10 @@ dataSources:
       abis:
         - name: TicketLand
           file: ./abis/TicketLand.json
+        - name: VipLand
+          file: ./abis/VipLand.json
+        - name: NFTWithRarity
+          file: ./abis/NFTWithRarity.json
       eventHandlers:
         - event: RoleGranted(indexed bytes32,indexed address,indexed address)
           handler: handleRoleGranted
@@ -40,6 +44,12 @@ dataSources:
       abis:
         - name: VipLand
           file: ./abis/VipLand.json
+        - name: TicketLand
+          file: ./abis/TicketLand.json
+        - name: VipLand
+          file: ./abis/VipLand.json
+        - name: NFTWithRarity
+          file: ./abis/NFTWithRarity.json
       eventHandlers:
         - event: RoleGranted(indexed bytes32,indexed address,indexed address)
           handler: handleRoleGranted
@@ -62,6 +72,12 @@ dataSources:
       abis:
         - name: NFTFactory
           file: ./abis/NFTFactory.json
+        - name: TicketLand
+          file: ./abis/TicketLand.json
+        - name: VipLand
+          file: ./abis/VipLand.json
+        - name: NFTWithRarity
+          file: ./abis/NFTWithRarity.json
       eventHandlers:
         - event: NFTSupportCreate(address,address,uint256)
           handler: handleNFTSupportCreate

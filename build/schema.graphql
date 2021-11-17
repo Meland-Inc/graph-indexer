@@ -56,7 +56,7 @@ type Metadata @entity {
 	id: ID!
 	itemType: ItemType!
 	vipland: Vipland
-	tikcetland: Tikcetland
+	ticketland: Tikcetland
 	placeable: Placeable
 }
 
