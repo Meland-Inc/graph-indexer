@@ -5,7 +5,7 @@ import {
 	ChangedPublicationFee,
 	ChangedOwnerCutPerMillion
 } from '../generated/entities/Marketplace/Marketplace';
-import { Order } from '../generated/entities/schema';
+import { NFT, Order } from '../generated/entities/schema';
 import { addNFTProperty, buildSupplyQuantity, buildNFT } from '../nft';
 import { OrderStatus_cancelled, OrderStatus_open, OrderStatus_sold } from '../enums';
 import { buildAccount } from '../account';
@@ -38,7 +38,7 @@ export function handleOrderCreated(event: OrderCreated): void {
 }
 
 export function handleOrderSuccessful(event: OrderSuccessful): void {
-	let orderId = event.params.id.toString();
+	let orderId = event.params.id.toHex();
 	let order = Order.load(orderId);
 	order.status = OrderStatus_sold;
 	order.buyer = event.params.buyer;
@@ -46,8 +46,16 @@ export function handleOrderSuccessful(event: OrderSuccessful): void {
 }
 
 export function handleOrderCancelled(event: OrderCancelled): void {
-	let orderId = event.params.id.toString();
+	let orderId = event.params.id.toHex();
 	let order = Order.load(orderId);
+
+	// remove activie order
+	let nft = NFT.load(order.nft);
+	if (nft !== null) {
+		nft.activeOrder = null;
+		nft.save();
+	}
+
 	order.status = OrderStatus_cancelled;
 	order.save();
 }
