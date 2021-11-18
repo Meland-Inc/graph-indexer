@@ -7,7 +7,7 @@ dataSources:
     network: mumbai
     source:
       startBlock: 21531031
-      address: '0x5d63e9Ede241B3900aF941A2a95432b38ac5b22B'
+      address: '0xbc7B370F6692a838f280e1114c6862458192D02B'
       abi: TicketLand
     mapping:
       kind: ethereum/events
@@ -33,7 +33,7 @@ dataSources:
     network: mumbai
     source:
       startBlock: 21531031
-      address: '0x5d63e9Ede241B3900aF941A2a95432b38ac5b22B'
+      address: '0xbc7B370F6692a838f280e1114c6862458192D02B'
       abi: VipLand
     mapping:
       kind: ethereum/events
@@ -61,7 +61,7 @@ dataSources:
     network: mumbai
     source:
       startBlock: 21531031
-      address: '0xA04fC29C1d6be4739894444d7E51B78722132E7B'
+      address: '0x9F8fd4060ECC0b444651Ebb78AcA47fB554eaF56'
       abi: NFTFactory
     mapping:
       kind: ethereum/events
@@ -87,7 +87,7 @@ dataSources:
     network: mumbai
     source:
       startBlock: 21531031
-      address: '0x3dC42C7df45A1314fD380F03f9F351F99c25A172'
+      address: '0x902DEa0531aF3c11c4fDD6599DeD07b2bAfCbe64'
       abi: NFTStore
     mapping:
       kind: ethereum/events
@@ -119,7 +119,7 @@ dataSources:
     network: mumbai
     source:
       startBlock: 21531031
-      address: '0x90620D1a6B2B0ea4715B48338d34613CF272E7a8'
+      address: '0x6E5F5653bC78571974c511DC7324190e9B53C3f3'
       abi: Marketplace
     mapping:
       kind: ethereum/events

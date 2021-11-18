@@ -1,27 +1,42 @@
 import { ethereum, Address, BigInt, log } from '@graphprotocol/graph-ts';
-import { NFTWithRarity as ERC721 } from './generated/entities/templates/NFTWithRarity/NFTWithRarity';
-import { SupplyQuantity, NFT as NFTSchema } from './generated/entities/schema';
+import { NFTWithRarity as ERC721, Transfer } from './generated/entities/templates/NFTWithRarity/NFTWithRarity';
+import { SupplyQuantity, NFT as NFTSchema, Order } from './generated/entities/schema';
 import { buildMetadata } from './metadata';
 import { buildAccount } from './account';
 import { isLand } from './land';
 import { format } from './helper';
+import { OrderStatus_cancelled, OrderStatus_open } from './enums';
 
 interface MabyeNFT {
 	rarity: string;
 	symbol: string;
+    name: string;
 }
 
 export function buildNFTId(addressOfNFT: Address, tokenId: BigInt): string {
-    return format("{}#{}", [addressOfNFT.toString(), tokenId.toString()]);
+    return format("{}#{}", [addressOfNFT.toHex(), tokenId.toString()]);
 }
 
 export function buildNFT(block: ethereum.Block, addressOfNFT: Address, tokenId: BigInt): NFTSchema {
 	let nftId = buildNFTId(addressOfNFT, tokenId);
 	let erc721 = ERC721.bind(addressOfNFT);
+    let rarity = '';
+	let rarityRv = erc721.try_rarity();
+
+	if (!rarityRv.reverted) {
+		rarity = rarityRv.value;
+	}
 	let nft = NFTSchema.load(nftId);
 	if (nft === null) {
 		nft = new NFTSchema(nftId);
+        nft.tokenId = tokenId;
+        nft.tokenURI = erc721.tokenURI(tokenId);
+        nft.rarity = rarity;
+        nft.symbol = erc721.symbol();
+        nft.name = erc721.name();
+        nft.soldAt = block.timestamp;
 		nft.createdAt = block.timestamp;
+		nft.updatedAt = block.timestamp;
 		nft.contractAddress = addressOfNFT;
 		nft.metadata = buildMetadata(addressOfNFT, tokenId).id;
 		nft.owner = buildAccount(erc721.ownerOf(tokenId)).id;
@@ -35,8 +50,8 @@ export function buildSupplyQuantity(addressOfNFT: Address): SupplyQuantity {
 	let supplyQuantity = SupplyQuantity.load(supplyQuantityId);
 	if (supplyQuantity === null) {
 		supplyQuantity = new SupplyQuantity(supplyQuantityId);
+	    supplyQuantity.soldCount = BigInt.fromI32(0);
 	}
-	supplyQuantity.soldCount = BigInt.fromI32(0);
 	// 最大供应量
 	supplyQuantity.maxSupply = getMaxSupply(addressOfNFT);
     supplyQuantity.save();
@@ -60,6 +75,7 @@ export function addNFTProperty<T extends MabyeNFT, T1 extends Address>(object: T
     log.info("nft address: {}", [nftAddress.toHex()]);
 	let erc721 = ERC721.bind(nftAddress);
 	object.rarity = '';
+    object.name = erc721.name();
 	object.symbol = erc721.symbol();
 	let tryRarity = erc721.try_rarity();
 	if (!tryRarity.reverted) {
@@ -70,4 +86,25 @@ export function addNFTProperty<T extends MabyeNFT, T1 extends Address>(object: T
 
 export function isPlaceable(symbol: string): boolean {
 	return symbol.includes('placeable');
+}
+
+// 通用处理nft
+// 这里会处理所有nft的转账
+export function gensHandleTransfer(event: Transfer, nft: NFTSchema): void {
+    // 如果是从0转出来
+    // 表示mint一个
+    if (event.params.from.equals(Address.fromString("0x0000000000000000000000000000000000000000"))) {
+
+    }
+
+    // 如果nft被转移，并且activeOrder不为null
+	// 并且from跟order的creator不是一个人
+	// 则将order cancel
+	let order = Order.load(nft.activeOrder);
+	if (order !== null
+        && order.status == OrderStatus_open
+    ) {
+		order.status = OrderStatus_cancelled;
+		order.save();
+	}
 }

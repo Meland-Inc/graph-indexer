@@ -9,9 +9,10 @@ import { Order } from '../generated/entities/schema';
 import { addNFTProperty, buildSupplyQuantity, buildNFT } from '../nft';
 import { OrderStatus_cancelled, OrderStatus_open, OrderStatus_sold } from '../enums';
 import { buildAccount } from '../account';
+import { buildMetadata } from '../metadata';
 
 export function handleOrderCreated(event: OrderCreated): void {
-	let orderId = event.params.id.toString();
+	let orderId = event.params.id.toHex();
 	let nftAddress = event.params.nftAddress;
 	let nftTokenId = event.params.assetId;
 	let order = new Order(orderId);
@@ -25,6 +26,8 @@ export function handleOrderCreated(event: OrderCreated): void {
 	nft.activeOrder = order.id;
 	nft.save()
 	order.nft = nft.id;
+	order.txHash = event.block.hash;
+	order.metadata = buildMetadata(nftAddress, nftTokenId).id;
 	order.owner = buildAccount(event.params.seller).id;
 	order.price = event.params.priceInWei;
 	order.status = OrderStatus_open;

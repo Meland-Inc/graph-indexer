@@ -26,11 +26,13 @@ type RcCoordinates @entity {
 type Vipland @entity {
 	id: ID!
 	imageURL: String!
+	rcCoordinates: RcCoordinates
 }
 
 type Tikcetland @entity {
 	id: ID!
 	imageURL: String!
+	rcCoordinates: RcCoordinates
 }
 
 # 放置类道具
@@ -102,6 +104,7 @@ type Order @entity {
 比如 ticket-land
 """
 	symbol: String!
+	name: String!
 
 	owner: Account!
 """
@@ -137,6 +140,11 @@ type NFTStoreItem @entity {
 比如 ticket land
 """
 	symbol: String!
+	name: String!
+"""
+当前剩余库存
+"""
+	currentStockQuantity: BigInt!
 	owner: Account!
 """
 价格,单位gwei. 18位数
@@ -177,6 +185,7 @@ type NFT @entity {
 	# 类别, 装备代号. 一个系列名
 	# 比如 ticket land
 	symbol: String!
+	name: String!
 	tokenURI: String
 	orders: [Order!] @derivedFrom(field: "nft") # History of all orders. Should only ever be ONE open order. all others must be cancelled or sold
 	activeOrder: Order

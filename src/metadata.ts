@@ -3,11 +3,12 @@ import { NFTWithRarity as ERC721 } from './generated/entities/templates/NFTWithR
 import {
 	Metadata,
 	Placeable as PlaceableSchema,
+	RcCoordinates,
 	Tikcetland as TikcetLandSchema,
 	Vipland as ViplandSchema
 } from './generated/entities/schema';
 import { isPlaceable } from './nft';
-import { isTicketLand, isVipLand } from './land';
+import { buildRcCoordinates, isTicketLand, isVipLand } from './land';
 import { ItemType_placeable, ItemType_ticketland, ItemType_undefined, ItemType_vipland } from './enums';
 import { format } from './helper';
 
@@ -38,6 +39,7 @@ export function buildTicketLand(nftAddress: Address, tokenId: BigInt): TikcetLan
 	let ticketLand = TikcetLandSchema.load(ticketLandId);
 	if (ticketLand === null) {
 		ticketLand = new TikcetLandSchema(ticketLandId);
+        ticketLand.rcCoordinates = buildRcCoordinates(tokenId).id;
 		ticketLand.imageURL = format('https://token-image.melandworld.com/{}/{}', [ ItemType_ticketland, ticketLandId ]);
 	}
 	ticketLand.save();
@@ -49,6 +51,7 @@ export function buildVipLand(nftAddress: Address, tokenId: BigInt): ViplandSchem
 	let ticketLand = ViplandSchema.load(ticketLandId);
 	if (ticketLand === null) {
 		ticketLand = new ViplandSchema(ticketLandId);
+        ticketLand.rcCoordinates = buildRcCoordinates(tokenId).id;
 		ticketLand.imageURL = format('https://token-image.melandworld.com/{}/{}', [ ItemType_vipland, ticketLandId ]);
 	}
 	ticketLand.save();
