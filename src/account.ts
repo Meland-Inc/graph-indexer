@@ -1,5 +1,5 @@
 import { Address } from '@graphprotocol/graph-ts';
-import { Web3Account as Account } from './generated/entities/schema';
+import { Web3IAccount as Account } from './generated/entities/schema';
 import { format } from './helper';
 
 export function buildAccount(accountAddress: Address): Account {

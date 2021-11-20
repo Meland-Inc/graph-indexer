@@ -42,7 +42,7 @@ type Placeable @entity {
 	imageURL: String!
 }
 
-type Web3Account @entity {
+type Web3IAccount @entity {
 	id: ID! # ETH addr
 	address: Bytes!
 	imageURL: String!
@@ -106,7 +106,7 @@ type Order @entity {
 	symbol: String!
 	name: String!
 
-	owner: Web3Account!
+	owner: Web3IAccount!
 """
 购买者
 """
@@ -145,7 +145,7 @@ type NFTStoreItem @entity {
 当前剩余库存
 """
 	currentStockQuantity: BigInt!
-	owner: Web3Account!
+	owner: Web3IAccount!
 """
 价格,单位gwei. 18位数
 1000000000000000000 gwei = 1 个
@@ -185,7 +185,7 @@ type NFT @entity {
 稀有度
 """
 	rarity: String
-	owner: Web3Account!
+	owner: Web3IAccount!
 	# 类别, 装备代号. 一个系列名
 	# 比如 ticket land
 	symbol: String!
