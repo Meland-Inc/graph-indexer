@@ -1,5 +1,5 @@
 import { Address } from '@graphprotocol/graph-ts';
-import { Account } from './generated/entities/schema';
+import { Web3Account as Account } from './generated/entities/schema';
 import { format } from './helper';
 
 export function buildAccount(accountAddress: Address): Account {
@@ -9,7 +9,7 @@ export function buildAccount(accountAddress: Address): Account {
 		account = new Account(accountId);
         account.address = accountAddress;
 	}
-    account.imageURL = format("https://token-image.melandworld.com/account/{}", [ accountId ]);
+    account.imageURL = format("https://token-image-release.melandworld.com/account/{}", [ accountId ]);
     account.save();
     return account!;
 }

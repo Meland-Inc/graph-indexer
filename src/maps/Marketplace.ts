@@ -24,7 +24,7 @@ export function handleOrderCreated(event: OrderCreated): void {
 	order = addNFTProperty(order, nftAddress);
 	let nft = buildNFT(event.block, nftAddress, nftTokenId);
 	nft.activeOrder = order.id;
-	nft.save()
+	nft.save();
 	order.nft = nft.id;
 	order.txHash = event.block.hash;
 	order.metadata = buildMetadata(nftAddress, nftTokenId).id;
@@ -40,6 +40,14 @@ export function handleOrderCreated(event: OrderCreated): void {
 export function handleOrderSuccessful(event: OrderSuccessful): void {
 	let orderId = event.params.id.toHex();
 	let order = Order.load(orderId);
+
+	// remove activie order
+	let nft = NFT.load(order.nft);
+	if (nft !== null) {
+		nft.activeOrder = null;
+		nft.save();
+	}
+
 	order.status = OrderStatus_sold;
 	order.buyer = event.params.buyer;
 	order.save();

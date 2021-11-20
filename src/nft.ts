@@ -32,6 +32,7 @@ export function buildNFT(block: ethereum.Block, addressOfNFT: Address, tokenId: 
         nft.tokenId = tokenId;
         nft.tokenURI = erc721.tokenURI(tokenId);
         nft.rarity = rarity;
+		nft.supplyQuantity = buildSupplyQuantity(addressOfNFT).id;
         nft.symbol = erc721.symbol();
         nft.name = erc721.name();
         nft.soldAt = block.timestamp;

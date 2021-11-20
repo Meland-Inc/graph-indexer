@@ -28,7 +28,7 @@ export function buildPlaceable(nftAddress: Address): PlaceableSchema {
 	if (placeable === null) {
 		placeable = new PlaceableSchema(cid);
 		placeable.rarity = rarity;
-		placeable.imageURL = format('https://token-image.melandworld.com/{}/{}', [ ItemType_placeable, cid ]);
+		placeable.imageURL = format('https://token-image-release.melandworld.com/{}/{}', [ ItemType_placeable, cid ]);
 	}
 	placeable.save();
 	return placeable!;
@@ -40,7 +40,7 @@ export function buildTicketLand(nftAddress: Address, tokenId: BigInt): TikcetLan
 	if (ticketLand === null) {
 		ticketLand = new TikcetLandSchema(ticketLandId);
         ticketLand.rcCoordinates = buildRcCoordinates(tokenId).id;
-		ticketLand.imageURL = format('https://token-image.melandworld.com/{}/{}', [ ItemType_ticketland, ticketLandId ]);
+		ticketLand.imageURL = format('https://token-image-release.melandworld.com/{}/{}', [ ItemType_ticketland, ticketLandId ]);
 	}
 	ticketLand.save();
 	return ticketLand!;
@@ -52,7 +52,7 @@ export function buildVipLand(nftAddress: Address, tokenId: BigInt): ViplandSchem
 	if (ticketLand === null) {
 		ticketLand = new ViplandSchema(ticketLandId);
         ticketLand.rcCoordinates = buildRcCoordinates(tokenId).id;
-		ticketLand.imageURL = format('https://token-image.melandworld.com/{}/{}', [ ItemType_vipland, ticketLandId ]);
+		ticketLand.imageURL = format('https://token-image-release.melandworld.com/{}/{}', [ ItemType_vipland, ticketLandId ]);
 	}
 	ticketLand.save();
 	return ticketLand!;
@@ -82,7 +82,7 @@ export function buildMetadata(nftAddress: Address, tokenId: BigInt): Metadata {
 		itemType = ItemType_vipland;
 	}
 
-	let metadataId: string = format('{}-{}', [ symbol, rarity ]);
+	let metadataId: string = format('{}-{}-{}', [ symbol, rarity, tokenId.toString() ]);
 	log.info('metadataId: {}', [ metadataId ]);
 	let metadata = Metadata.load(metadataId);
 	if (metadata === null) {
