@@ -1,6 +1,4 @@
 import { buildAccount } from '../account';
-import { OrderStatus_cancelled, OrderStatus_open } from '../enums';
-import { Order } from '../generated/entities/schema';
 import { Transfer, RoleGranted } from '../generated/entities/templates/NFTWithRarity/NFTWithRarity';
 import { buildNFT, gensHandleTransfer } from '../nft';
 
