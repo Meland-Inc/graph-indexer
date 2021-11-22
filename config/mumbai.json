@@ -1,10 +1,10 @@
 {
     "network": "mumbai",
-    "VipLand_address": "0xbeD0Af2606b377AcBAb8A0B9C62662A9B8488435",
-    "TicketLand_address": "0xbeD0Af2606b377AcBAb8A0B9C62662A9B8488435",
-    "NFTStore_address": "0x4E46eE4e55eF8a65BCF48dF57B135CDbE5eC1c98",
-    "Marketplace_address": "0x6282F8Cc981976d9c8c10CC29E48779F2b6FFcC0",
-    "MELD_address": "0x5c46c8Af827AF33dcEdF061467C09a770aD988eb",
-    "NFTFactory_address": "0x9EE142DdBB1fbC07e5D880f762b7e2fc12bAB635",
-    "start_block": "21743671"
+    "VipLand_address": "0x4f0e8dB885Bc284EA6a7519CD6b7A2d84F4Eeb77",
+    "TicketLand_address": "0x4f0e8dB885Bc284EA6a7519CD6b7A2d84F4Eeb77",
+    "NFTStore_address": "0x622f018f90fE087E74f4Bd0E2347eb67C1D70d1C",
+    "Marketplace_address": "0xA187Dd9F849De0b294B4254DADed65eb18c9323D",
+    "MELD_address": "0xdba2f3e230b9593ADB4Ea65c7a47BB74f790a81a",
+    "NFTFactory_address": "0x9bA45db7828Ae2f122977071c45a36b7Eef440C8",
+    "start_block": "21748405"
 }
