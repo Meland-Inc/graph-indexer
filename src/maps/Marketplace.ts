@@ -18,7 +18,7 @@ export function handleOrderCreated(event: OrderCreated): void {
 	let order = new Order(orderId);
 	order.blockNumber = event.block.number;
 	order.createdAt = event.block.timestamp;
-	order.description = '测试description';
+	order.description = 'this is description';
 	order.expiresAt = event.params.expiresAt;
 	order.nftAddress = nftAddress;
 	order = addNFTProperty(order, nftAddress);

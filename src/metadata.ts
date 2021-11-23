@@ -82,7 +82,7 @@ export function buildMetadata(nftAddress: Address, tokenId: BigInt): Metadata {
 		itemType = ItemType_vipland;
 	}
 
-	let metadataId: string = format('{}-{}-{}', [ symbol, rarity, tokenId.toString() ]);
+	let metadataId: string = format('{}-{}-{}-{}', [ symbol, rarity, nftAddress.toHex(), tokenId.toString() ]);
 	log.info('metadataId: {}', [ metadataId ]);
 	let metadata = Metadata.load(metadataId);
 	if (metadata === null) {

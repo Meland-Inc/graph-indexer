@@ -113,6 +113,8 @@ dataSources:
           handler: handleNFTDelete
         - event: NFTIdPoolUpdate(indexed uint256,indexed address,uint256)
           handler: handleNFTIdPoolUpdate
+        - event: NFTItemUpdate(indexed uint256,address)
+          handler: handleNFTItemUpdate
       file: ./src/maps/NFTStore.ts
   - kind: ethereum/contract
     name: Marketplace

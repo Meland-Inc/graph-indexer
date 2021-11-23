@@ -1,4 +1,4 @@
-import { NFTBuyed, NFTCreated, NFTDelete, NFTIdPoolUpdate, NFTStore } from '../generated/entities/NFTStore/NFTStore';
+import { NFTBuyed, NFTCreated, NFTDelete, NFTIdPoolUpdate, NFTItemUpdate, NFTStore } from '../generated/entities/NFTStore/NFTStore';
 import { ethereum, JSONValue, TypedMap, Entity, Bytes, Address, BigInt, log } from '@graphprotocol/graph-ts';
 import { NFTStoreItem, Metadata, SupplyQuantity } from '../generated/entities/schema';
 import { buildMetadata } from '../metadata';
@@ -79,4 +79,16 @@ export function handleNFTIdPoolUpdate(event: NFTIdPoolUpdate): void {
 	let nftStoreItem = NFTStoreItem.load(event.params.id.toString());
 	nftStoreItem.currentStockQuantity = event.params.length;
 	nftStoreItem.save();
+}
+
+export function handleNFTItemUpdate(event: NFTItemUpdate): void {
+	let storeItemOfNFT = NFTStoreItem.load(event.params.id.toString());
+	let nftStore = NFTStore.bind(event.address);
+	let nftAddress = event.params.nftAddress;
+	let itemFromBlockchain = nftStore.itemByNFT(nftAddress);
+
+	storeItemOfNFT.description = itemFromBlockchain.value6;
+	storeItemOfNFT.limit = itemFromBlockchain.value5;
+	storeItemOfNFT.price = itemFromBlockchain.value3;
+	storeItemOfNFT.save();
 }
