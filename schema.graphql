@@ -17,6 +17,11 @@ enum ItemType @entity {
 	placeable
 }
 
+type NFTSupport @entity {
+	id: ID!
+	nftAddress: Bytes!
+}
+
 type RcCoordinates @entity {
 	id: ID!
 	r: BigInt!
