@@ -1,0 +1,10 @@
+export const network = "mumbai";
+export const VipLand_address = "0xC3c17c6206B99a5d385f4f884261911bc43cb289";
+export const TicketLand_address = "0xC3c17c6206B99a5d385f4f884261911bc43cb289";
+export const NFTStore_address = "0x1776794Fe40d26D8a3a0ba3dBcD879F012Da66C7";
+export const Marketplace_address = "0xed75e911252A2f4268E60D1Cefdb3e6Fd671b50F";
+export const MELD_address = "0x7bAE33cCd1b4486a81F16093EE07C4A61C21d635";
+export const NFTFactory_address = "0xE3FD99c336A8B0d215008414e5D236c871327168";
+export const Faucet_address = "0x3236366FeE4c92dF4D4eAB97207b95960aD14b5C";
+export const VestPool_address = "";
+export const start_block = "21743671";

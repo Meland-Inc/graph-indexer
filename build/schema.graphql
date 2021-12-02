@@ -53,7 +53,7 @@ type TransferLog @entity {
 	nft: NFT!
 }
 
-type Log @entity {
+type Web3Log @entity {
 	id: ID!
 
 	"""
@@ -106,6 +106,7 @@ type Web3IAccount @entity {
 	address: Bytes!
 	imageURL: String!
 	nfts: [NFT!] @derivedFrom(field: "owner")
+	balanceOfMELD: BigInt!
 }
 
 type Metadata @entity {

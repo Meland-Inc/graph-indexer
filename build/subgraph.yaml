@@ -7,7 +7,7 @@ dataSources:
     network: mumbai
     source:
       startBlock: 21743671
-      address: "0x5Ec3e739e34717c57D2dD28223321E07d8D4521C"
+      address: "0xC3c17c6206B99a5d385f4f884261911bc43cb289"
       abi: TicketLand
     mapping:
       kind: ethereum/events
@@ -33,7 +33,7 @@ dataSources:
     network: mumbai
     source:
       startBlock: 21743671
-      address: "0x5Ec3e739e34717c57D2dD28223321E07d8D4521C"
+      address: "0xC3c17c6206B99a5d385f4f884261911bc43cb289"
       abi: VipLand
     mapping:
       kind: ethereum/events
@@ -61,7 +61,7 @@ dataSources:
     network: mumbai
     source:
       startBlock: 21743671
-      address: "0x32b7A796ec7d0B86a89db962cEB1788A540b1Dd9"
+      address: "0xE3FD99c336A8B0d215008414e5D236c871327168"
       abi: NFTFactory
     mapping:
       kind: ethereum/events
@@ -87,7 +87,7 @@ dataSources:
     network: mumbai
     source:
       startBlock: 21743671
-      address: "0x962b597ce160b3730dC8fE06c8EF7b7afe4eBd2b"
+      address: "0x1776794Fe40d26D8a3a0ba3dBcD879F012Da66C7"
       abi: NFTStore
     mapping:
       kind: ethereum/events
@@ -121,7 +121,7 @@ dataSources:
     network: mumbai
     source:
       startBlock: 21743671
-      address: "0xfbDD6a2b4F9eBd4A41CE53896fB863C4c479FF63"
+      address: "0xed75e911252A2f4268E60D1Cefdb3e6Fd671b50F"
       abi: Marketplace
     mapping:
       kind: ethereum/events
@@ -153,6 +153,26 @@ dataSources:
         - event: ChangedOwnerCutPerMillion(uint256)
           handler: handleChangedOwnerCutPerMillion
       file: Marketplace/Marketplace.wasm
+  - kind: ethereum/contract
+    name: MELD
+    network: mumbai
+    source:
+      startBlock: 21743671
+      address: "0x7bAE33cCd1b4486a81F16093EE07C4A61C21d635"
+      abi: MELD
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - MELD
+      abis:
+        - name: MELD
+          file: MELD/abis/MELD.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+      file: MELD/MELD.wasm
 templates:
   - name: NFTWithRarity
     kind: ethereum/contract

@@ -4,7 +4,7 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: TicketLand
-    network: mumbai
+    network: {{network}}
     source:
       startBlock: {{start_block}}
       address: '{{TicketLand_address}}'
@@ -30,7 +30,7 @@ dataSources:
       file: ./src/maps/TicketLand.ts
   - kind: ethereum/contract
     name: VipLand
-    network: mumbai
+    network: {{network}}
     source:
       startBlock: {{start_block}}
       address: '{{VipLand_address}}'
@@ -58,7 +58,7 @@ dataSources:
       file: ./src/maps/VipLand.ts
   - kind: ethereum/contract
     name: NFTFactory
-    network: mumbai
+    network: {{network}}
     source:
       startBlock: {{start_block}}
       address: '{{NFTFactory_address}}'
@@ -84,7 +84,7 @@ dataSources:
       file: ./src/maps/NFTFactory.ts
   - kind: ethereum/contract
     name: NFTStore
-    network: mumbai
+    network: {{network}}
     source:
       startBlock: {{start_block}}
       address: '{{NFTStore_address}}'
@@ -118,7 +118,7 @@ dataSources:
       file: ./src/maps/NFTStore.ts
   - kind: ethereum/contract
     name: Marketplace
-    network: mumbai
+    network: {{network}}
     source:
       startBlock: {{start_block}}
       address: '{{Marketplace_address}}'
@@ -152,6 +152,26 @@ dataSources:
         - event: ChangedOwnerCutPerMillion(uint256)
           handler: handleChangedOwnerCutPerMillion
       file: ./src/maps/Marketplace.ts
+  - kind: ethereum/contract
+    name: MELD
+    network: {{network}}
+    source:
+      startBlock: {{start_block}}
+      address: '{{MELD_address}}'
+      abi: MELD
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - MELD
+      abis:
+        - name: MELD
+          file: ./abis/MELD.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+      file: ./src/maps/MELD.ts
 templates:
   - name: NFTWithRarity
     kind: ethereum/contract
