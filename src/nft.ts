@@ -18,6 +18,14 @@ export function buildNFTId(addressOfNFT: Address, tokenId: BigInt): string {
     return format("{}#{}", [addressOfNFT.toHex(), tokenId.toString()]);
 }
 
+function isMeLandAI(symbol: string): boolean {
+	return [
+		"ticketland",
+		"vipland",
+		"placeable"
+	].includes(symbol);
+}
+
 export function buildNFT(block: ethereum.Block, addressOfNFT: Address, tokenId: BigInt): NFTSchema {
 	let nftId = buildNFTId(addressOfNFT, tokenId);
 	let erc721 = ERC721.bind(addressOfNFT);
@@ -35,6 +43,7 @@ export function buildNFT(block: ethereum.Block, addressOfNFT: Address, tokenId: 
         nft.rarity = rarity;
 		nft.supplyQuantity = buildSupplyQuantity(addressOfNFT).id;
         nft.symbol = erc721.symbol();
+		nft.isMeLandAI = isMeLandAI(nft.symbol);
         nft.name = erc721.name();
         nft.soldAt = block.timestamp;
 		nft.createdAt = block.timestamp;
