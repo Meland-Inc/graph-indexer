@@ -1,6 +1,6 @@
 import { NFTBuyed, NFTCreated, NFTDelete, NFTIdPoolUpdate, NFTItemUpdate, NFTStore } from '../generated/entities/NFTStore/NFTStore';
-import { ethereum, JSONValue, TypedMap, Entity, Bytes, Address, BigInt, log } from '@graphprotocol/graph-ts';
-import { NFTStoreItem, Metadata, SupplyQuantity } from '../generated/entities/schema';
+import { BigInt, log } from '@graphprotocol/graph-ts';
+import { NFTStoreItem } from '../generated/entities/schema';
 import { buildMetadata } from '../metadata';
 import { addNFTProperty, buildNFT, buildSupplyQuantity } from '../nft';
 import { NFTStoreStatus_open, NFTStoreStatus_sold } from '../enums';
@@ -19,7 +19,10 @@ export function handleNFTBuyed(event: NFTBuyed): void {
 		totalSupply = tryTotalSupply.value;
 	}
 	let nftStoreItem = NFTStoreItem.load(event.params.id.toString());
+	nftStoreItem = nftStoreItem!;
+
 	supplyQuantity.soldCount = totalSupply;
+
 	supplyQuantity.save();
 
 	// 每当有人购买
@@ -80,13 +83,13 @@ export function handleNFTDelete(event: NFTDelete): void {}
 // 当供应池变化时
 // 更新当前供应量
 export function handleNFTIdPoolUpdate(event: NFTIdPoolUpdate): void {
-	let nftStoreItem = NFTStoreItem.load(event.params.id.toString());
+	let nftStoreItem = NFTStoreItem.load(event.params.id.toString())!;
 	nftStoreItem.currentStockQuantity = event.params.length;
 	nftStoreItem.save();
 }
 
 export function handleNFTItemUpdate(event: NFTItemUpdate): void {
-	let storeItemOfNFT = NFTStoreItem.load(event.params.id.toString());
+	let storeItemOfNFT = NFTStoreItem.load(event.params.id.toString())!;
 	let nftStore = NFTStore.bind(event.address);
 	let nftAddress = event.params.nftAddress;
 	let itemFromBlockchain = nftStore.itemByNFT(nftAddress);

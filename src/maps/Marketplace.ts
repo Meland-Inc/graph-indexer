@@ -42,10 +42,10 @@ export function handleOrderCreated(event: OrderCreated): void {
 
 export function handleOrderSuccessful(event: OrderSuccessful): void {
 	let orderId = event.params.id.toHex();
-	let order = Order.load(orderId);
+	let order = Order.load(orderId)!;
 
 	// remove activie order
-	let nft = NFT.load(order.nft);
+	let nft = NFT.load(order.nft!);
 	if (nft !== null) {
 		nft.activeOrder = null;
 		nft.save();
@@ -60,10 +60,10 @@ export function handleOrderSuccessful(event: OrderSuccessful): void {
 
 export function handleOrderCancelled(event: OrderCancelled): void {
 	let orderId = event.params.id.toHex();
-	let order = Order.load(orderId);
+	let order = Order.load(orderId)!;
 
 	// remove activie order
-	let nft = NFT.load(order.nft);
+	let nft = NFT.load(order.nft!);
 	if (nft !== null) {
 		nft.activeOrder = null;
 		nft.save();
@@ -77,7 +77,7 @@ export function handleOrderCancelled(event: OrderCancelled): void {
 
 export function handleOrderUpdated(event: OrderUpdated): void {
 	let orderId = event.params.id.toHex();
-	let order = Order.load(orderId);
+	let order = Order.load(orderId)!;
 
 	order.expiresAt = event.params.expiresAt;
 	order.price = event.params.priceInWei;

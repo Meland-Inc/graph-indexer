@@ -1,3 +1,5 @@
+import {  } from '@graphprotocol/graph-ts';
+
 export function format(fmt: string, args: string[]): string {
 	let out = '';
 	let argIndex = 0;

@@ -9,9 +9,9 @@ import { OrderStatus_cancelled, OrderStatus_open } from './enums';
 import { transferLog } from './log';
 
 interface MabyeNFT {
-	rarity: string;
-	symbol: string;
-    name: string;
+	rarity: string | null;
+	symbol: string | null;
+    name: string | null;
 }
 
 export function buildNFTId(addressOfNFT: Address, tokenId: BigInt): string {
@@ -109,15 +109,18 @@ export function gensHandleTransfer(event: Transfer, nft: NFTSchema): void {
 
     }
 
-    // 如果nft被转移，并且activeOrder不为null
+
+	// 如果nft被转移，并且activeOrder不为null
 	// 并且from跟order的creator不是一个人
 	// 则将order cancel
-	let order = Order.load(nft.activeOrder);
-	if (order !== null
-        && order.status == OrderStatus_open
-    ) {
-		order.status = OrderStatus_cancelled;
-		order.save();
+	if (nft.activeOrder != null) {
+		let order = Order.load(nft.activeOrder);
+		if (order !== null
+			&& order.status == OrderStatus_open
+		) {
+			order.status = OrderStatus_cancelled;
+			order.save();
+		}
 	}
 
 	transferLog(event, nft);

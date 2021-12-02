@@ -4,11 +4,6 @@ import { NFTSupport } from '../generated/entities/schema';
 
 export function handleNFTSupportCreate(event: NFTSupportCreate): void {
 	ERC721.create(event.params.nft);
-
-	// event.transaction
-
-	// event
-
 	let snft = new NFTSupport(event.params.nft.toHex());
 	snft.nftAddress = event.params.nft;
 	snft.save();
