@@ -53,7 +53,7 @@ type TransferLog @entity {
 	nft: NFT!
 }
 
-type Log @entity {
+type Web3Log @entity {
 	id: ID!
 
 	"""
