@@ -105,7 +105,7 @@ dataSources:
         - name: NFTWithRarity
           file: ./abis/NFTWithRarity.json
       eventHandlers:
-        - event: NFTBuyed(indexed uint256,indexed address,address,uint256)
+        - event: NFTBuyed(indexed uint256,indexed address,address,uint256,uint256)
           handler: handleNFTBuyed
         - event: NFTCreated(indexed uint256,indexed address,address,uint256)
           handler: handleNFTCreated
@@ -145,6 +145,8 @@ dataSources:
           handler: handleOrderSuccessful
         - event: OrderCancelled(bytes32,indexed uint256,indexed address,address)
           handler: handleOrderCancelled
+        - event: OrderUpdated(bytes32,uint256,uint256)
+          handler: handleOrderUpdated
         - event: ChangedPublicationFee(uint256)
           handler: handleChangedPublicationFee
         - event: ChangedOwnerCutPerMillion(uint256)

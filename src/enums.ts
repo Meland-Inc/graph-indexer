@@ -13,3 +13,9 @@ export const ItemType_undefined = 'undefined';
 export const ItemType_ticketland = 'ticketland';
 export const ItemType_vipland = 'vipland';
 export const ItemType_placeable = 'placeable';
+
+export const LogAction_transfer = 'transfer';
+export const LogAction_createorder = 'createorder';
+export const LogAction_cancelorder = 'cancelorder';
+export const LogAction_updateorder = 'updateorder';
+export const LogAction_bought = 'bought';

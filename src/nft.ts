@@ -6,6 +6,7 @@ import { buildAccount } from './account';
 import { isLand } from './land';
 import { format } from './helper';
 import { OrderStatus_cancelled, OrderStatus_open } from './enums';
+import { transferLog } from './log';
 
 interface MabyeNFT {
 	rarity: string;
@@ -108,4 +109,6 @@ export function gensHandleTransfer(event: Transfer, nft: NFTSchema): void {
 		order.status = OrderStatus_cancelled;
 		order.save();
 	}
+
+	transferLog(event, nft);
 }

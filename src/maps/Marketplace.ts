@@ -3,13 +3,15 @@ import {
 	OrderCreated,
 	OrderSuccessful,
 	ChangedPublicationFee,
-	ChangedOwnerCutPerMillion
+	ChangedOwnerCutPerMillion,
+	OrderUpdated
 } from '../generated/entities/Marketplace/Marketplace';
 import { NFT, Order } from '../generated/entities/schema';
 import { addNFTProperty, buildSupplyQuantity, buildNFT } from '../nft';
 import { OrderStatus_cancelled, OrderStatus_open, OrderStatus_sold } from '../enums';
 import { buildAccount } from '../account';
 import { buildMetadata } from '../metadata';
+import { boughtLog, cancelorderLog, createorderLog, updateorderLog } from '../log';
 
 export function handleOrderCreated(event: OrderCreated): void {
 	let orderId = event.params.id.toHex();
@@ -18,7 +20,6 @@ export function handleOrderCreated(event: OrderCreated): void {
 	let order = new Order(orderId);
 	order.blockNumber = event.block.number;
 	order.createdAt = event.block.timestamp;
-	order.description = 'this is description';
 	order.expiresAt = event.params.expiresAt;
 	order.nftAddress = nftAddress;
 	order = addNFTProperty(order, nftAddress);
@@ -35,6 +36,8 @@ export function handleOrderCreated(event: OrderCreated): void {
 	order.tokenId = event.params.assetId;
 	order.updatedAt = event.block.timestamp;
 	order.save();
+
+	createorderLog(event, order);
 }
 
 export function handleOrderSuccessful(event: OrderSuccessful): void {
@@ -51,6 +54,8 @@ export function handleOrderSuccessful(event: OrderSuccessful): void {
 	order.status = OrderStatus_sold;
 	order.buyer = event.params.buyer;
 	order.save();
+
+	boughtLog(event, nft, order.price);
 }
 
 export function handleOrderCancelled(event: OrderCancelled): void {
@@ -66,6 +71,19 @@ export function handleOrderCancelled(event: OrderCancelled): void {
 
 	order.status = OrderStatus_cancelled;
 	order.save();
+
+	cancelorderLog(event, order);
+}
+
+export function handleOrderUpdated(event: OrderUpdated): void {
+	let orderId = event.params.id.toHex();
+	let order = Order.load(orderId);
+
+	order.expiresAt = event.params.expiresAt;
+	order.price = event.params.priceInWei;
+	order.save();
+
+	updateorderLog(event, order);
 }
 
 export function handleChangedPublicationFee(event: ChangedPublicationFee): void {}

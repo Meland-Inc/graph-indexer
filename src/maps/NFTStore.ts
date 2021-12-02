@@ -2,11 +2,12 @@ import { NFTBuyed, NFTCreated, NFTDelete, NFTIdPoolUpdate, NFTItemUpdate, NFTSto
 import { ethereum, JSONValue, TypedMap, Entity, Bytes, Address, BigInt, log } from '@graphprotocol/graph-ts';
 import { NFTStoreItem, Metadata, SupplyQuantity } from '../generated/entities/schema';
 import { buildMetadata } from '../metadata';
-import { addNFTProperty, buildSupplyQuantity } from '../nft';
+import { addNFTProperty, buildNFT, buildSupplyQuantity } from '../nft';
 import { NFTStoreStatus_open, NFTStoreStatus_sold } from '../enums';
 import { NFTWithRarity as ERC721 } from '../generated/entities/templates/NFTWithRarity/NFTWithRarity';
 import { NFTWithRarity as ERC721Template } from '../generated/entities/templates';
 import { buildAccount } from '../account';
+import { boughtLog } from '../log';
 
 export function handleNFTBuyed(event: NFTBuyed): void {
 	let erc721 = ERC721.bind(event.params.nftAddress);
@@ -31,6 +32,10 @@ export function handleNFTBuyed(event: NFTBuyed): void {
 		nftStoreItem.status = NFTStoreStatus_sold;
 	}
 	nftStoreItem.save();
+
+	let nft = buildNFT(event.block, event.params.nftAddress, event.params.tokenId);
+
+	boughtLog(event, nft, nftStoreItem.price);
 }
 
 // 上架索引
@@ -55,7 +60,6 @@ export function handleNFTCreated(event: NFTCreated): void {
 	}
 
 	storeItemOfNFT.supplyQuantity = buildSupplyQuantity(nftAddress).id;
-	storeItemOfNFT.description = itemFromBlockchain.value6;
 	storeItemOfNFT.createdAt = event.block.timestamp;
 	storeItemOfNFT.blockNumber = event.block.number;
 	storeItemOfNFT.limit = itemFromBlockchain.value5;
@@ -87,7 +91,6 @@ export function handleNFTItemUpdate(event: NFTItemUpdate): void {
 	let nftAddress = event.params.nftAddress;
 	let itemFromBlockchain = nftStore.itemByNFT(nftAddress);
 
-	storeItemOfNFT.description = itemFromBlockchain.value6;
 	storeItemOfNFT.limit = itemFromBlockchain.value5;
 	storeItemOfNFT.price = itemFromBlockchain.value3;
 	storeItemOfNFT.save();

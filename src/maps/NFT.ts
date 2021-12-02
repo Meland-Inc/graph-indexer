@@ -6,7 +6,6 @@ export function handleTransfer(event: Transfer): void {
 	let nft = buildNFT(event.block, event.address, event.params.tokenId);
 	nft.owner = buildAccount(event.params.to).id;
 	nft.save();
-
     gensHandleTransfer(event, nft);
 }
 
