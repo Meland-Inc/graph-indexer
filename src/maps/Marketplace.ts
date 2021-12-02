@@ -37,7 +37,7 @@ export function handleOrderCreated(event: OrderCreated): void {
 	order.updatedAt = event.block.timestamp;
 	order.save();
 
-	createorderLog(event, order);
+	createorderLog(event, order!);
 }
 
 export function handleOrderSuccessful(event: OrderSuccessful): void {
@@ -55,7 +55,7 @@ export function handleOrderSuccessful(event: OrderSuccessful): void {
 	order.buyer = event.params.buyer;
 	order.save();
 
-	boughtLog(event, nft, order.price);
+	boughtLog(event, nft!, order.price);
 }
 
 export function handleOrderCancelled(event: OrderCancelled): void {
@@ -72,7 +72,7 @@ export function handleOrderCancelled(event: OrderCancelled): void {
 	order.status = OrderStatus_cancelled;
 	order.save();
 
-	cancelorderLog(event, order);
+	cancelorderLog(event, order!);
 }
 
 export function handleOrderUpdated(event: OrderUpdated): void {
@@ -83,7 +83,7 @@ export function handleOrderUpdated(event: OrderUpdated): void {
 	order.price = event.params.priceInWei;
 	order.save();
 
-	updateorderLog(event, order);
+	updateorderLog(event, order!);
 }
 
 export function handleChangedPublicationFee(event: ChangedPublicationFee): void {}

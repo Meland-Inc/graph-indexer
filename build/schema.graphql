@@ -17,6 +17,60 @@ enum ItemType @entity {
 	placeable
 }
 
+enum LogAction @entity {
+	transfer
+	createorder
+	cancelorder
+	updateorder
+	bought
+}
+
+# 购买日志
+type BoughtLog @entity {
+	id: ID!
+	nft: NFT!
+	priceInWei: BigInt!
+}
+
+type UpdateorderLog @entity {
+	id: ID!
+	order: Order!
+}
+
+type CancelorderLog @entity {
+	id: ID!
+	order: Order!
+}
+
+type CreateorderLog @entity {
+	id: ID!
+	order: Order!
+}
+
+type TransferLog @entity {
+	id: ID!
+	to: Web3IAccount!
+	nft: NFT!
+}
+
+type Log @entity {
+	id: ID!
+
+	"""
+	操作账号
+	"""
+	account: Web3IAccount!
+	createdAt: BigInt!
+
+	action: LogAction!
+	
+	transfer: TransferLog
+	createorder: CreateorderLog
+	cancelorder: CancelorderLog
+	updateorder: UpdateorderLog
+	bought: BoughtLog
+}
+
 type NFTSupport @entity {
 	id: ID!
 	nftAddress: Bytes!
@@ -101,7 +155,6 @@ type Order @entity {
 """
 描述信息
 """
-	description: String!
 	tokenId: BigInt!
 	txHash: Bytes!
 """
@@ -139,7 +192,6 @@ type NFTStoreItem @entity {
 稀有度
 """
 	rarity: String
-	description: String!
 """
 类别, 装备代号. 一个系列名
 比如 ticket land

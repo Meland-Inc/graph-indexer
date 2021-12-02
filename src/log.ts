@@ -4,7 +4,7 @@ import { BigInt } from '@graphprotocol/graph-ts';
 import { buildAccount } from './account';
 import { LogAction_bought, LogAction_cancelorder, LogAction_createorder, LogAction_transfer, LogAction_updateorder } from './enums';
 
-export function createorderLog(event: ethereum.Event, order: Order) {
+export function createorderLog(event: ethereum.Event, order: Order): Log {
     let logId = event.transaction.hash.toHex();
 	let oLog = new CancelorderLog(logId);
     oLog.order = order.id;
@@ -20,7 +20,7 @@ export function createorderLog(event: ethereum.Event, order: Order) {
 	return log;
 }
 
-export function updateorderLog(event: ethereum.Event, order: Order) {
+export function updateorderLog(event: ethereum.Event, order: Order): Log {
     let logId = event.transaction.hash.toHex();
 	let oLog = new CancelorderLog(logId);
     oLog.order = order.id;
@@ -36,7 +36,7 @@ export function updateorderLog(event: ethereum.Event, order: Order) {
 	return log;
 }
 
-export function cancelorderLog(event: ethereum.Event, order: Order) {
+export function cancelorderLog(event: ethereum.Event, order: Order): Log {
     let logId = event.transaction.hash.toHex();
 	let oLog = new CancelorderLog(logId);
     oLog.order = order.id;
@@ -52,10 +52,10 @@ export function cancelorderLog(event: ethereum.Event, order: Order) {
 	return log;
 }
 
-export function transferLog(event: ethereum.Event, nft: NFT) {
+export function transferLog(event: ethereum.Event, nft: NFT): Log {
     let logId = event.transaction.hash.toHex();
 	let transferLog = new TransferLog(logId);
-    transferLog.to = buildAccount(event.transaction.to).id;
+    transferLog.to = buildAccount(event.transaction.to!).id;
     transferLog.nft = nft.id;
     transferLog.save();
 
@@ -69,7 +69,7 @@ export function transferLog(event: ethereum.Event, nft: NFT) {
 	return log;
 }
 
-export function boughtLog(event: ethereum.Event, nft: NFT, priceInWei: BigInt) {
+export function boughtLog(event: ethereum.Event, nft: NFT, priceInWei: BigInt): Log {
 	let logId = event.transaction.hash.toHex();
 	let boughtLog = new BoughtLog(logId);
 	boughtLog.nft = nft.id;
