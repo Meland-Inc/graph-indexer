@@ -243,6 +243,7 @@ type NFT @entity {
 稀有度
 """
 	rarity: String
+	isMeLandAI: Boolean!
 	owner: Web3IAccount!
 	# 类别, 装备代号. 一个系列名
 	# 比如 ticket land

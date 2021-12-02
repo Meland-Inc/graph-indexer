@@ -19,11 +19,12 @@ export function buildNFTId(addressOfNFT: Address, tokenId: BigInt): string {
 }
 
 function isMeLandAI(symbol: string): boolean {
-	return [
-		"ticketland",
-		"vipland",
-		"placeable"
-	].includes(symbol);
+	if (symbol == "vipland"
+		|| symbol == "ticketland"
+		|| symbol == "placeable") {
+		return true;
+	}
+	return false;
 }
 
 export function buildNFT(block: ethereum.Block, addressOfNFT: Address, tokenId: BigInt): NFTSchema {
