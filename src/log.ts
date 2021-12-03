@@ -13,7 +13,7 @@ export function createorderLog(event: ethereum.Event, order: Order): Web3Log {
 	let log = new Web3Log(logId);
 	log.account = buildAccount(event.transaction.from).id;
 	log.action = LogAction_createorder;
-	log.bought = oLog.id;
+	log.createorder = oLog.id;
     log.createdAt = event.block.timestamp;
 	log.save();
 
@@ -29,7 +29,7 @@ export function updateorderLog(event: ethereum.Event, order: Order): Web3Log {
 	let log = new Web3Log(logId);
 	log.account = buildAccount(event.transaction.from).id;
 	log.action = LogAction_updateorder;
-	log.bought = oLog.id;
+	log.updateorder = oLog.id;
     log.createdAt = event.block.timestamp;
 	log.save();
 
@@ -45,7 +45,7 @@ export function cancelorderLog(event: ethereum.Event, order: Order): Web3Log {
 	let log = new Web3Log(logId);
 	log.account = buildAccount(event.transaction.from).id;
 	log.action = LogAction_cancelorder;
-	log.bought = oLog.id;
+	log.cancelorder = oLog.id;
     log.createdAt = event.block.timestamp;
 	log.save();
 
@@ -62,7 +62,7 @@ export function transferLog(event: ethereum.Event, nft: NFT): Web3Log {
 	let log = new Web3Log(logId);
 	log.account = buildAccount(event.transaction.from).id;
 	log.action = LogAction_transfer;
-	log.bought = transferLog.id;
+	log.transfer = transferLog.id;
     log.createdAt = event.block.timestamp;
 	log.save();
 
