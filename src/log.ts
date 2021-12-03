@@ -1,4 +1,4 @@
-import { CreateorderLog, Web3Log, BoughtLog, TransferLog, NFT, Order, CancelorderLog } from './generated/entities/schema';
+import { CreateorderLog, Web3Log, BoughtLog, TransferLog, NFT, Order, CancelorderLog, UpdateorderLog } from './generated/entities/schema';
 import { ethereum } from '@graphprotocol/graph-ts/chain/ethereum';
 import { BigInt } from '@graphprotocol/graph-ts';
 import { buildAccount } from './account';
@@ -6,7 +6,7 @@ import { LogAction_bought, LogAction_cancelorder, LogAction_createorder, LogActi
 
 export function createorderLog(event: ethereum.Event, order: Order): Web3Log {
     let logId = event.transaction.hash.toHex();
-	let oLog = new CancelorderLog(logId);
+	let oLog = new CreateorderLog(logId);
     oLog.order = order.id;
     oLog.save();
 
@@ -22,7 +22,7 @@ export function createorderLog(event: ethereum.Event, order: Order): Web3Log {
 
 export function updateorderLog(event: ethereum.Event, order: Order): Web3Log {
     let logId = event.transaction.hash.toHex();
-	let oLog = new CancelorderLog(logId);
+	let oLog = new UpdateorderLog(logId);
     oLog.order = order.id;
     oLog.save();
 
