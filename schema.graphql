@@ -102,16 +102,17 @@ type Placeable @entity {
 	imageURL: String!
 }
 
+type Thirdparty @entity {
+	id: ID!
+	imageURL: String!
+}
+
 type Web3IAccount @entity {
 	id: ID! # ETH addr
 	address: Bytes!
 	imageURL: String!
 	nfts: [NFT!] @derivedFrom(field: "owner")
 	balanceOfMELD: BigInt!
-}
-
-type Thirdparty @entity {
-	id: ID!
 }
 
 type Metadata @entity {
