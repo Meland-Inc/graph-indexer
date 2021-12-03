@@ -184,6 +184,7 @@ type NFTStoreItem @entity {
 	id: ID!
 	nftAddress: Bytes!
 	txHash: Bytes!
+	tokenURI: String
 	blockNumber: BigInt!
 """
 供应量信息

@@ -62,6 +62,13 @@ export function handleNFTCreated(event: NFTCreated): void {
 		}
 	}
 
+	let tokenURI = "";
+	let trytokenURI = erc721.try_tokenURI(BigInt.fromI32(0));
+	if (!trytokenURI.reverted) {
+		tokenURI = trytokenURI.value;
+	}
+
+	storeItemOfNFT.tokenURI = tokenURI;
 	storeItemOfNFT.supplyQuantity = buildSupplyQuantity(nftAddress).id;
 	storeItemOfNFT.createdAt = event.block.timestamp;
 	storeItemOfNFT.blockNumber = event.block.number;
