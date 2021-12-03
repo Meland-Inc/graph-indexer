@@ -10,6 +10,7 @@ export const NFTStoreStatus_sold = 'sold';
 export const NFTStoreStatus_cancelled = 'cancelled';
 
 export const ItemType_undefined = 'undefined';
+export const ItemType_thirdparty = 'thirdparty';
 export const ItemType_ticketland = 'ticketland';
 export const ItemType_vipland = 'vipland';
 export const ItemType_placeable = 'placeable';

@@ -12,6 +12,7 @@ enum NFTStoreStatus @entity {
 
 enum ItemType @entity {
 	undefined
+	thirdparty
 	ticketland
 	vipland
 	placeable
@@ -109,6 +110,10 @@ type Web3IAccount @entity {
 	balanceOfMELD: BigInt!
 }
 
+type Thirdparty @entity {
+	id: ID!
+}
+
 type Metadata @entity {
 	"""
 	metadata id
@@ -120,6 +125,7 @@ type Metadata @entity {
 	vipland: Vipland
 	ticketland: Tikcetland
 	placeable: Placeable
+	thirdparty: Thirdparty
 }
 
 
