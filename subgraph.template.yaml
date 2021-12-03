@@ -22,6 +22,8 @@ dataSources:
           file: ./abis/VipLand.json
         - name: NFTWithRarity
           file: ./abis/NFTWithRarity.json
+        - name: MELD
+          file: ./abis/MELD.json
       eventHandlers:
         - event: RoleGranted(indexed bytes32,indexed address,indexed address)
           handler: handleRoleGranted
@@ -50,6 +52,8 @@ dataSources:
           file: ./abis/VipLand.json
         - name: NFTWithRarity
           file: ./abis/NFTWithRarity.json
+        - name: MELD
+          file: ./abis/MELD.json
       eventHandlers:
         - event: RoleGranted(indexed bytes32,indexed address,indexed address)
           handler: handleRoleGranted
@@ -78,6 +82,8 @@ dataSources:
           file: ./abis/VipLand.json
         - name: NFTWithRarity
           file: ./abis/NFTWithRarity.json
+        - name: MELD
+          file: ./abis/MELD.json
       eventHandlers:
         - event: NFTSupportCreate(address,address,uint256)
           handler: handleNFTSupportCreate
@@ -104,6 +110,8 @@ dataSources:
           file: ./abis/VipLand.json
         - name: NFTWithRarity
           file: ./abis/NFTWithRarity.json
+        - name: MELD
+          file: ./abis/MELD.json
       eventHandlers:
         - event: NFTBuyed(indexed uint256,indexed address,address,uint256,uint256)
           handler: handleNFTBuyed
@@ -138,6 +146,8 @@ dataSources:
           file: ./abis/VipLand.json
         - name: NFTWithRarity
           file: ./abis/NFTWithRarity.json
+        - name: MELD
+          file: ./abis/MELD.json
       eventHandlers:
         - event: OrderCreated(bytes32,indexed uint256,indexed address,address,uint256,uint256)
           handler: handleOrderCreated
