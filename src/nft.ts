@@ -19,9 +19,7 @@ export function buildNFTId(addressOfNFT: Address, tokenId: BigInt): string {
 }
 
 function isMeLandAI(symbol: string): boolean {
-	if (symbol == "vipland"
-		|| symbol == "ticketland"
-		|| symbol == "placeable") {
+	if (symbol.includes("MELAND")) {
 		return true;
 	}
 	return false;
