@@ -198,6 +198,8 @@ templates:
       abis:
         - name: NFTWithRarity
           file: ./abis/NFTWithRarity.json
+        - name: MELD
+          file: ./abis/MELD.json
       eventHandlers:
         - event: RoleGranted(indexed bytes32,indexed address,indexed address)
           handler: handleRoleGranted
