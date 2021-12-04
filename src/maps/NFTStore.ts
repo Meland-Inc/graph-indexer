@@ -63,7 +63,7 @@ export function handleNFTCreated(event: NFTCreated): void {
 	}
 
 	let tokenURI = "";
-	let trytokenURI = erc721.try_tokenURI(BigInt.fromI32(0));
+	let trytokenURI = erc721.try_tokenURI(BigInt.fromI32(1));
 	if (!trytokenURI.reverted) {
 		tokenURI = trytokenURI.value;
 	}
