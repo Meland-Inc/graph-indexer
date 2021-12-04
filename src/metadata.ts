@@ -65,6 +65,7 @@ export function buildThirdParty(nftAddress: Address, tokenId: BigInt): Thirdpart
 		thirdparty = new Thirdparty(tokenId.toString());
 		thirdparty.imageURL = format('https://token-image-release.melandworld.com/{}/{}', [ ItemType_ticketland, tokenId.toString() ]);
 	}
+	thirdparty.save();
 	return thirdparty!;
 }
 
