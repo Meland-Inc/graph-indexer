@@ -12,6 +12,7 @@ enum NFTStoreStatus @entity {
 
 enum ItemType @entity {
 	undefined
+	thirdparty
 	ticketland
 	vipland
 	placeable
@@ -34,6 +35,7 @@ type BoughtLog @entity {
 
 type UpdateorderLog @entity {
 	id: ID!
+	oldOrder: Order!
 	order: Order!
 }
 
@@ -101,6 +103,11 @@ type Placeable @entity {
 	imageURL: String!
 }
 
+type Thirdparty @entity {
+	id: ID!
+	imageURL: String!
+}
+
 type Web3IAccount @entity {
 	id: ID! # ETH addr
 	address: Bytes!
@@ -120,6 +127,7 @@ type Metadata @entity {
 	vipland: Vipland
 	ticketland: Tikcetland
 	placeable: Placeable
+	thirdparty: Thirdparty
 }
 
 
@@ -184,6 +192,7 @@ type NFTStoreItem @entity {
 	id: ID!
 	nftAddress: Bytes!
 	txHash: Bytes!
+	tokenURI: String
 	blockNumber: BigInt!
 """
 供应量信息

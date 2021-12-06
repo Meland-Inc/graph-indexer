@@ -78,12 +78,13 @@ export function handleOrderCancelled(event: OrderCancelled): void {
 export function handleOrderUpdated(event: OrderUpdated): void {
 	let orderId = event.params.id.toHex();
 	let order = Order.load(orderId)!;
+	let oldOrder = Order.load(orderId)!;
 
 	order.expiresAt = event.params.expiresAt;
 	order.price = event.params.priceInWei;
 	order.save();
 
-	updateorderLog(event, order!);
+	updateorderLog(event, order!, oldOrder!);
 }
 
 export function handleChangedPublicationFee(event: ChangedPublicationFee): void {}

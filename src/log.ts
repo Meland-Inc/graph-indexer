@@ -3,6 +3,7 @@ import { ethereum } from '@graphprotocol/graph-ts/chain/ethereum';
 import { BigInt } from '@graphprotocol/graph-ts';
 import { buildAccount } from './account';
 import { LogAction_bought, LogAction_cancelorder, LogAction_createorder, LogAction_transfer, LogAction_updateorder } from './enums';
+import { format } from './helper';
 
 export function createorderLog(event: ethereum.Event, order: Order): Web3Log {
     let logId = event.transaction.hash.toHex();
@@ -20,11 +21,14 @@ export function createorderLog(event: ethereum.Event, order: Order): Web3Log {
 	return log;
 }
 
-export function updateorderLog(event: ethereum.Event, order: Order): Web3Log {
+export function updateorderLog(event: ethereum.Event, order: Order, oldOrder: Order): Web3Log {
     let logId = event.transaction.hash.toHex();
 	let oLog = new UpdateorderLog(logId);
     oLog.order = order.id;
     oLog.save();
+
+	oldOrder.id = format("%s-%s", [oldOrder.id, logId]);
+	oldOrder.save();
 
 	let log = new Web3Log(logId);
 	log.account = buildAccount(event.transaction.from).id;
