@@ -23,7 +23,7 @@ export function createorderLog(event: ethereum.Event, order: Order): Web3Log {
 
 export function updateorderLog(event: ethereum.Event, order: Order, oldOrder: Order): Web3Log {
     let logId = event.transaction.hash.toHex();
-	oldOrder.id = format("%s-%s", [oldOrder.id, logId]);
+	oldOrder.id = format("{}-{}", [oldOrder.id, logId]);
 	oldOrder.save();
 	let oLog = new UpdateorderLog(logId);
 	oLog.oldOrder = oldOrder.id;
