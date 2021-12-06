@@ -79,7 +79,8 @@ export function handleOrderUpdated(event: OrderUpdated): void {
 	let orderId = event.params.id.toHex();
 	let order = Order.load(orderId)!;
 	let oldOrder = Order.load(orderId)!;
-
+	oldOrder.expiresAt = event.params.expiresAt;
+	oldOrder.price = event.params.priceInWei;
 	order.expiresAt = event.params.expiresAt;
 	order.price = event.params.priceInWei;
 	order.save();
