@@ -35,7 +35,6 @@ type BoughtLog @entity {
 
 type UpdateorderLog @entity {
 	id: ID!
-	oldOrder: Order!
 	order: Order!
 }
 

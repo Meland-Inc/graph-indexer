@@ -8,6 +8,8 @@ import { format } from './helper';
 export function createorderLog(event: ethereum.Event, order: Order): Web3Log {
     let logId = event.transaction.hash.toHex();
 	let oLog = new CreateorderLog(logId);
+	order.id = format("{}-{}", [logId, order.id]);
+	order.save();
     oLog.order = order.id;
     oLog.save();
 
@@ -21,12 +23,11 @@ export function createorderLog(event: ethereum.Event, order: Order): Web3Log {
 	return log;
 }
 
-export function updateorderLog(event: ethereum.Event, order: Order, oldOrder: Order): Web3Log {
+export function updateorderLog(event: ethereum.Event, order: Order): Web3Log {
     let logId = event.transaction.hash.toHex();
-	oldOrder.id = format("{}-{}", [oldOrder.id, logId]);
-	oldOrder.save();
 	let oLog = new UpdateorderLog(logId);
-	oLog.oldOrder = oldOrder.id;
+	order.id = format("{}-{}", [logId, order.id]);
+	order.save();
     oLog.order = order.id;
     oLog.save();
 
