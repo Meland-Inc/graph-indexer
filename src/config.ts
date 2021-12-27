@@ -10,4 +10,4 @@ export const Meland1155Wearable_address = "0x7863a968b9ECf0f239eB4008Cba39fD6342
 export const Meland1155Placeable_address = "".toLowerCase();
 export const Meland1155LandFuture_address = "0x6F6c65387DeBd2293c111373d54fb927F0b41F27".toLowerCase();
 export const MelandTier_address = "0xe48c7307d8684707B1f42c858fbc1d5E2C7e4ddB".toLowerCase();
-export const start_block = "23090652".toLowerCase();
+export const start_block = "23179817".toLowerCase();

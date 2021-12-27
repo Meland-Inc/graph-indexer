@@ -7,7 +7,7 @@ import { buildAccount } from './account';
 import { format } from './helper';
 import { Land } from './generated/entities/Land/Land';
 import { MelandWearable } from './generated/entities/Wearable/MelandWearable';
-import { ItemType_placeable, ItemType_thirdparty, ItemType_tier, ItemType_viplandfutures, ItemType_wearable, OrderStatus_cancelled, OrderStatus_open, VUnknow } from './enums';
+import { ItemType_placeable, ItemType_thirdparty, ItemType_tier, ItemType_viplandfutures, ItemType_wearable, NFTProtocol_erc721, OrderStatus_cancelled, OrderStatus_open, VUnknow } from './enums';
 import { transferLog } from './log';
 import * as configs from './config';
 
@@ -16,10 +16,16 @@ export function buildNFTId(addressOfNFT: Address, tokenId: BigInt): string {
 }
 
 export function fetchMetadata(uri: string): TypedMap<string, JSONValue> {
+
+	// TODO
+	if (uri.includes("ticketland")) {
+		uri = "https://token-metadata-release.melandworld.com/land/ticketland/";
+	}
+
 	let storeId = Bytes.fromUTF8(uri).toHex();
 	let metadataValueEn = NFTMetadataOrigin.load(storeId);
 
-	log.info("start metadata: {}", [uri]);
+	log.info("start metadata: {}", [ uri ]);
 
 	if (metadataValueEn) {
 		log.info("fetch nft metadata: {}, use cache {}", [uri, storeId]);
@@ -192,13 +198,17 @@ export function buildNFTSymbol(addressOfNFT: Address, tokenId: BigInt): string {
 	return ItemType_thirdparty;
 }
 
-export function getNFTTokenURI(addressOfNFT: Address, tokenId: BigInt): string {
+export function getNFTTokenURI(addressOfNFT: Address, tokenId: BigInt, protocol: string): string {
 	let erc721 = ERC721.bind(addressOfNFT);
 	let erc1155 = ERC1155.bind(addressOfNFT);
+
 	let uri = "unknow";
-	let tryname721 = erc721.try_tokenURI(tokenId);
-	if (!tryname721.reverted) {
-		uri = tryname721.value;
+
+	if (protocol == NFTProtocol_erc721) {
+		let tryname721 = erc721.try_tokenURI(tokenId);
+		if (!tryname721.reverted) {
+			uri = tryname721.value;
+		}
 	} else {
 		let tryuri = erc1155.try_uri(tokenId);
 		if (!tryuri.reverted) {
@@ -236,7 +246,7 @@ export function buildNFT(
 ): NFTSchema {
 	let nftId = buildNFTId(addressOfNFT, tokenId);
 	let nft = NFTSchema.load(nftId);
-	let tokenURI = getNFTTokenURI(addressOfNFT, tokenId);
+	let tokenURI = getNFTTokenURI(addressOfNFT, tokenId, protocol);
 	let rarity = getNFTRarityByURI(tokenURI);
 	if (nft === null) {
 		nft = new NFTSchema(nftId);

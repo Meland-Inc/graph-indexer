@@ -63,6 +63,8 @@ function buildStoreItem(
 			limit = try_limit.value.value1;
 		}
 
+		let receipt = item.melandStoreReceipt(symbol);
+
 		let tokenURI = format("https://token-metadata-release.melandworld.com/wearable/cid/{}", [symbol]);
 		let try_tokenURI = item.try_melandStoreItemURI(symbol);
 		if (!try_tokenURI.reverted) {
@@ -107,7 +109,7 @@ function buildStoreItem(
 		storeItemOfNFT.txHash = txHash;
 		storeItemOfNFT.nftAddress = nftAddress;
 		storeItemOfNFT.metadata = buildMetadata(nftAddress, BigInt.fromI32(0), NFTProtocol_erc1155, tokenURI).id;
-		storeItemOfNFT.owner = buildAccount(Address.zero()).id;
+		storeItemOfNFT.owner = buildAccount(receipt).id;
 		storeItemOfNFT.price = price;
 		storeItemOfNFT.updatedAt = timestamp;
 		storeItemOfNFT.status = status;
