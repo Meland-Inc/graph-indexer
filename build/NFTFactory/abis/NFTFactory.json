@@ -35,10 +35,22 @@
     "anonymous": false,
     "inputs": [
       {
+        "components": [
+          {
+            "internalType": "contract IERC1155",
+            "name": "erc1155",
+            "type": "address"
+          },
+          {
+            "internalType": "contract IERC721",
+            "name": "erc721",
+            "type": "address"
+          }
+        ],
         "indexed": false,
-        "internalType": "contract IERC721",
+        "internalType": "struct NFTFactory.ERC721Or1155",
         "name": "nft",
-        "type": "address"
+        "type": "tuple"
       },
       {
         "indexed": false,
@@ -60,10 +72,22 @@
     "anonymous": false,
     "inputs": [
       {
+        "components": [
+          {
+            "internalType": "contract IERC1155",
+            "name": "erc1155",
+            "type": "address"
+          },
+          {
+            "internalType": "contract IERC721",
+            "name": "erc721",
+            "type": "address"
+          }
+        ],
         "indexed": false,
-        "internalType": "contract IERC721",
+        "internalType": "struct NFTFactory.ERC721Or1155",
         "name": "nft",
-        "type": "address"
+        "type": "tuple"
       },
       {
         "indexed": false,
@@ -79,6 +103,78 @@
       }
     ],
     "name": "NFTSupportRemove",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "nft",
+        "type": "address"
+      },
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "proposer",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "proposalTime",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bool",
+            "name": "approved",
+            "type": "bool"
+          }
+        ],
+        "indexed": false,
+        "internalType": "struct NFTFactory.RFC",
+        "name": "rfc",
+        "type": "tuple"
+      }
+    ],
+    "name": "RFCApproved",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "nft",
+        "type": "address"
+      },
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "proposer",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "proposalTime",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bool",
+            "name": "approved",
+            "type": "bool"
+          }
+        ],
+        "indexed": false,
+        "internalType": "struct NFTFactory.RFC",
+        "name": "rfc",
+        "type": "tuple"
+      }
+    ],
+    "name": "RFCCreated",
     "type": "event"
   },
   {
@@ -185,6 +281,19 @@
   {
     "inputs": [],
     "name": "GM_ROLE",
+    "outputs": [
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "MINTER_ROLE",
     "outputs": [
       {
         "internalType": "bytes32",
@@ -308,7 +417,7 @@
   {
     "inputs": [
       {
-        "internalType": "contract IERC721",
+        "internalType": "address",
         "name": "",
         "type": "address"
       }
@@ -316,8 +425,54 @@
     "name": "supportNFTs",
     "outputs": [
       {
+        "components": [
+          {
+            "internalType": "contract IERC1155",
+            "name": "erc1155",
+            "type": "address"
+          },
+          {
+            "internalType": "contract IERC721",
+            "name": "erc721",
+            "type": "address"
+          }
+        ],
+        "internalType": "struct NFTFactory.ERC721Or1155",
+        "name": "erc721or1155",
+        "type": "tuple"
+      },
+      {
         "internalType": "bool",
+        "name": "support",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
         "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "supportRFCs",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "proposer",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "proposalTime",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bool",
+        "name": "approved",
         "type": "bool"
       }
     ],
@@ -384,12 +539,12 @@
   {
     "inputs": [
       {
-        "internalType": "contract IERC721",
+        "internalType": "address",
         "name": "nft",
         "type": "address"
       }
     ],
-    "name": "newSupport",
+    "name": "newRFC",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -397,12 +552,25 @@
   {
     "inputs": [
       {
-        "internalType": "contract IERC721",
+        "internalType": "address",
         "name": "nft",
         "type": "address"
       }
     ],
-    "name": "removeSupport",
+    "name": "approveRFC",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "nft",
+        "type": "address"
+      }
+    ],
+    "name": "newSupport",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

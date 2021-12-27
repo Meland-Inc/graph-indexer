@@ -16,6 +16,10 @@ enum ItemType @entity {
 	ticketland
 	vipland
 	placeable
+	wearable
+	tier
+	futures
+	viplandfutures
 }
 
 enum LogAction @entity {
@@ -24,6 +28,58 @@ enum LogAction @entity {
 	cancelorder
 	updateorder
 	bought
+}
+
+# NFT协议
+# 区分erc721和erc1155
+enum NFTProtocol @entity {
+	erc721
+	erc1155
+}
+
+type NFTMetadataOrigin @entity {
+"""
+uri to hex
+"""
+	id: ID!
+
+	value: Bytes!
+}
+
+# 由于1155的复杂度, 可以实现NFT, Token, 和半NFT 
+# 关于1155目前我们只支持基于1155实现的NFT
+# 半NFT和token因为缺乏识别机制暂时不支持
+type ERC1155Reward @entity {
+	id: ID!
+	nft: NFT!
+	reward: MelandTierReward!
+}
+
+type ERC721Reward @entity {
+	id: ID!
+	nft: NFT!
+	reward: MelandTierReward!
+}
+
+type ERC20Reward @entity {
+	id: ID!
+	reward: MelandTierReward!
+	symbol: String!
+	name: String!
+	amount: BigInt!
+}
+
+type MelandTierReward @entity {
+	id: ID!
+	erc20rewards: [ERC20Reward!] @derivedFrom(field: "reward")
+	erc721rewards: [ERC721Reward!] @derivedFrom(field: "reward")
+	erc1155rewards: [ERC1155Reward!] @derivedFrom(field: "reward")
+}
+
+type OpenMelandTierReward @entity {
+	id: ID!
+	txHash: Bytes!
+	reward: MelandTierReward!
 }
 
 # 购买日志
@@ -74,7 +130,8 @@ type Web3Log @entity {
 
 type NFTSupport @entity {
 	id: ID!
-	nftAddress: Bytes!
+	address: Bytes!
+	nftProtocol: NFTProtocol!
 }
 
 type RcCoordinates @entity {
@@ -107,6 +164,26 @@ type Thirdparty @entity {
 	imageURL: String!
 }
 
+type Wearable @entity {
+	id: ID!
+	imageURL: String!
+}
+
+type Tier @entity {
+	id: ID!
+	imageURL: String!
+}
+
+type Future @entity {
+	id: ID!
+	imageURL: String!
+}
+
+type Viplandfuture @entity {
+	id: ID!
+	imageURL: String!
+}
+
 type Web3IAccount @entity {
 	id: ID! # ETH addr
 	address: Bytes!
@@ -123,12 +200,17 @@ type Metadata @entity {
 	"""
 	id: ID!
 	itemType: ItemType!
+	description: String!
+	nftProtocol: NFTProtocol!
 	vipland: Vipland
 	ticketland: Tikcetland
 	placeable: Placeable
 	thirdparty: Thirdparty
+	wearable: Wearable
+	tier: Tier
+	future: Future
+	viplandfutures: Viplandfuture
 }
-
 
 type SupplyQuantity @entity {
 	id: ID!
@@ -187,6 +269,18 @@ type Order @entity {
 	updatedAt: BigInt!
 }
 
+type ERC20 @entity {
+	id: ID!
+	name: String!
+	symbol: String!
+	imageURL: String!
+}
+
+type NFTStoreItemBuyCallbackStateStore @entity {
+	id: ID!
+	buyCallbackStates: String!
+}
+
 type NFTStoreItem @entity {
 	id: ID!
 	nftAddress: Bytes!
@@ -202,6 +296,10 @@ type NFTStoreItem @entity {
 """
 	rarity: String
 """
+Return parameters at the time of purchase
+"""
+	buyCallbackState: String!
+"""
 类别, 装备代号. 一个系列名
 比如 ticket land
 """
@@ -212,6 +310,10 @@ type NFTStoreItem @entity {
 """
 	currentStockQuantity: BigInt!
 	owner: Web3IAccount!
+"""
+当前接受的货币单位
+"""
+	acceptedToken: ERC20!
 """
 价格,单位gwei. 18位数
 1000000000000000000 gwei = 1 个

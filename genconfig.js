@@ -11,5 +11,5 @@ const confs = JSON.parse(buffer.toString());
 
 
 fs.writeFileSync(targetPath, `${Object.keys(confs).map(k => {
-return `export const ${k} = "${confs[k]}";`;}).join("\n")}
+return `export const ${k} = "${confs[k]}".toLowerCase();`;}).join("\n")}
 `);

@@ -15,7 +15,7 @@ export function buildAccount(accountAddress: Address): Account {
 	}
     account.imageURL = format("https://token-image-release.melandworld.com/account/{}", [ accountId ]);
     account.save();
-    return account!;
+    return account;
 }
 
 export function refreshMELDBalance(accountAddress: Address): void {

@@ -49,21 +49,21 @@
     "inputs": [
       {
         "indexed": true,
-        "internalType": "uint256",
-        "name": "id",
-        "type": "uint256"
-      },
-      {
-        "indexed": true,
         "internalType": "address",
         "name": "buyer",
         "type": "address"
       },
       {
-        "indexed": false,
-        "internalType": "contract IERC721MelandNFT",
+        "indexed": true,
+        "internalType": "contract IMelandStoreItems",
         "name": "nftAddress",
         "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "symbol",
+        "type": "string"
       },
       {
         "indexed": false,
@@ -85,28 +85,10 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "id",
-        "type": "uint256"
-      },
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "seller",
-        "type": "address"
-      },
-      {
         "indexed": false,
-        "internalType": "contract IERC721MelandNFT",
+        "internalType": "contract IMelandStoreItems",
         "name": "nftAddress",
         "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "priceInWei",
-        "type": "uint256"
       }
     ],
     "name": "NFTCreated",
@@ -116,20 +98,8 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "id",
-        "type": "uint256"
-      },
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "seller",
-        "type": "address"
-      },
-      {
         "indexed": false,
-        "internalType": "contract IERC721MelandNFT",
+        "internalType": "contract IMelandStoreItems",
         "name": "nftAddress",
         "type": "address"
       }
@@ -141,57 +111,19 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "id",
-        "type": "uint256"
-      },
-      {
-        "indexed": true,
-        "internalType": "contract IERC721MelandNFT",
-        "name": "nft",
-        "type": "address"
-      },
-      {
         "indexed": false,
-        "internalType": "uint256",
-        "name": "length",
-        "type": "uint256"
-      }
-    ],
-    "name": "NFTIdPoolUpdate",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "id",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "contract IERC721MelandNFT",
+        "internalType": "contract IMelandStoreItems",
         "name": "nftAddress",
         "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "checked",
+        "type": "bool"
       }
     ],
     "name": "NFTItemUpdate",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "account",
-        "type": "address"
-      }
-    ],
-    "name": "Paused",
     "type": "event"
   },
   {
@@ -273,19 +205,6 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": false,
-        "internalType": "address",
-        "name": "account",
-        "type": "address"
-      }
-    ],
-    "name": "Unpaused",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
         "indexed": true,
         "internalType": "address",
         "name": "implementation",
@@ -306,7 +225,8 @@
       }
     ],
     "stateMutability": "view",
-    "type": "function"
+    "type": "function",
+    "constant": true
   },
   {
     "inputs": [],
@@ -319,7 +239,8 @@
       }
     ],
     "stateMutability": "view",
-    "type": "function"
+    "type": "function",
+    "constant": true
   },
   {
     "inputs": [],
@@ -332,7 +253,8 @@
       }
     ],
     "stateMutability": "view",
-    "type": "function"
+    "type": "function",
+    "constant": true
   },
   {
     "inputs": [],
@@ -345,20 +267,22 @@
       }
     ],
     "stateMutability": "view",
-    "type": "function"
+    "type": "function",
+    "constant": true
   },
   {
     "inputs": [],
-    "name": "acceptedToken",
+    "name": "bidbackWallet",
     "outputs": [
       {
-        "internalType": "contract IERC20MELD",
+        "internalType": "address",
         "name": "",
         "type": "address"
       }
     ],
     "stateMutability": "view",
-    "type": "function"
+    "type": "function",
+    "constant": true
   },
   {
     "inputs": [],
@@ -371,7 +295,8 @@
       }
     ],
     "stateMutability": "view",
-    "type": "function"
+    "type": "function",
+    "constant": true
   },
   {
     "inputs": [
@@ -390,7 +315,8 @@
       }
     ],
     "stateMutability": "view",
-    "type": "function"
+    "type": "function",
+    "constant": true
   },
   {
     "inputs": [
@@ -432,94 +358,28 @@
       }
     ],
     "stateMutability": "view",
-    "type": "function"
+    "type": "function",
+    "constant": true
   },
   {
     "inputs": [
       {
-        "internalType": "contract IERC721MelandNFT",
+        "internalType": "contract IMelandStoreItems",
         "name": "",
         "type": "address"
       }
     ],
-    "name": "itemByNFT",
+    "name": "itemUploadedMap",
     "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "id",
-        "type": "uint256"
-      },
-      {
-        "internalType": "address",
-        "name": "seller",
-        "type": "address"
-      },
       {
         "internalType": "bool",
-        "name": "tokenIdPool",
+        "name": "",
         "type": "bool"
-      },
-      {
-        "internalType": "uint256",
-        "name": "priceInWei",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "sellsCount",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint32",
-        "name": "limit",
-        "type": "uint32"
       }
     ],
     "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "contract IERC721MelandNFT",
-        "name": "",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "name": "limitPool",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "string",
-        "name": "",
-        "type": "string"
-      }
-    ],
-    "name": "nftByCid",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
+    "type": "function",
+    "constant": true
   },
   {
     "inputs": [],
@@ -532,7 +392,8 @@
       }
     ],
     "stateMutability": "view",
-    "type": "function"
+    "type": "function",
+    "constant": true
   },
   {
     "inputs": [],
@@ -545,20 +406,8 @@
       }
     ],
     "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "paused",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
+    "type": "function",
+    "constant": true
   },
   {
     "inputs": [
@@ -613,31 +462,8 @@
       }
     ],
     "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "contract IERC721MelandNFT",
-        "name": "",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "name": "tokenIdsByNFT",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
+    "type": "function",
+    "constant": true
   },
   {
     "inputs": [
@@ -668,15 +494,11 @@
     "name": "upgradeToAndCall",
     "outputs": [],
     "stateMutability": "payable",
-    "type": "function"
+    "type": "function",
+    "payable": true
   },
   {
     "inputs": [
-      {
-        "internalType": "contract IERC20MELD",
-        "name": "_acceptedToken",
-        "type": "address"
-      },
       {
         "internalType": "address",
         "name": "_officialWallet",
@@ -685,6 +507,11 @@
       {
         "internalType": "address",
         "name": "_foundationWallet",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_bidbackWallet",
         "type": "address"
       },
       {
@@ -701,24 +528,9 @@
   {
     "inputs": [
       {
-        "internalType": "contract IERC721MelandNFT",
+        "internalType": "contract IMelandStoreItems",
         "name": "nft",
         "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "priceInWei",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint32",
-        "name": "limit",
-        "type": "uint32"
-      },
-      {
-        "internalType": "bool",
-        "name": "tokenIdPool",
-        "type": "bool"
       }
     ],
     "name": "createNFT",
@@ -729,17 +541,12 @@
   {
     "inputs": [
       {
-        "internalType": "contract IERC721MelandNFT",
+        "internalType": "contract IMelandStoreItems",
         "name": "nft",
         "type": "address"
-      },
-      {
-        "internalType": "uint32",
-        "name": "limit",
-        "type": "uint32"
       }
     ],
-    "name": "updateItemLimit",
+    "name": "removedNFT",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -747,72 +554,12 @@
   {
     "inputs": [
       {
-        "internalType": "contract IERC721MelandNFT",
-        "name": "nft",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "priceInWei",
-        "type": "uint256"
-      }
-    ],
-    "name": "updateItemPriceInWei",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "contract IERC721MelandNFT",
-        "name": "nft",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256[]",
-        "name": "tokenIds",
-        "type": "uint256[]"
-      }
-    ],
-    "name": "addTokenIdPool",
-    "outputs": [
-      {
-        "internalType": "uint8",
-        "name": "addCount",
-        "type": "uint8"
-      }
-    ],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "contract IERC721MelandNFT",
-        "name": "nft",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256[]",
-        "name": "tokenIds",
-        "type": "uint256[]"
-      }
-    ],
-    "name": "updateTokenIdPool",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "contract IERC721MelandNFT",
+        "internalType": "contract IMelandStoreItems",
         "name": "nft",
         "type": "address"
       }
     ],
-    "name": "deleteNFT",
+    "name": "updateNFTItemInfo",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -833,9 +580,14 @@
   {
     "inputs": [
       {
-        "internalType": "contract IERC721MelandNFT",
+        "internalType": "contract IMelandStoreItems",
         "name": "nft",
         "type": "address"
+      },
+      {
+        "internalType": "string",
+        "name": "symbol",
+        "type": "string"
       },
       {
         "internalType": "uint256",

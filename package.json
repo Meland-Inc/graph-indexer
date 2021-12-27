@@ -4,21 +4,24 @@
   "scripts": {
     "codegen": "graph codegen --debug --output-dir src/generated/entities/",
     "build": "graph build",
-    "prepare:mumbai": "mustache config/mumbai.json subgraph.template.yaml > subgraph.yaml && npm run codegen",
-    "prepare:local": "mustache config/local.json subgraph.template.yaml > subgraph.yaml && npm run codegen",
-    "prepare:matic": "mustache config/mumbai.json subgraph.template.yaml > subgraph.yaml && npm run codegen",
+    "prepare:mumbai": "node ./genconfig.js config/mumbai.json && mustache config/mumbai.json subgraph.template.yaml > subgraph.yaml && npm run codegen",
+    "prepare:local": "node ./genconfig.js config/local.json && mustache config/local.json subgraph.template.yaml > subgraph.yaml && npm run codegen",
+    "prepare:matic": "node ./genconfig.js config/matic.json && mustache config/mumbai.json subgraph.template.yaml > subgraph.yaml && npm run codegen",
     "deploy": "graph deploy --node https://api.thegraph.com/deploy/ HongjiangHuang/Meland",
     "create-local": "graph create --node http://localhost:8020/ HongjiangHuang/Meland",
     "remove-local": "graph remove --node http://localhost:8020/ HongjiangHuang/Meland",
     "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 HongjiangHuang/Meland",
-    "t": "yarn remove-local && yarn create-local && yarn deploy-local"
+    "deploy:bsc": "graph deploy --ipfs https://api-ipfs.melandworld.com --node https://jsonrpc-graph-node-bsc.melandworld.com HongjiangHuang/Meland",
+    "deploy:mumbai": "graph deploy --ipfs https://api-ipfs.melandworld.com --node https://jsonrpc-graph-node-mumbai.melandworld.com HongjiangHuang/Meland",
+    "create:mumbai": "graph create --node https://jsonrpc-graph-node-mumbai.melandworld.com HongjiangHuang/Meland",
+    "create:bsc": "graph create --node https://jsonrpc-graph-node-bsc.melandworld.com HongjiangHuang/Meland"
   },
   "dependencies": {
-    "@graphprotocol/graph-cli": "0.21.1",
-    "@graphprotocol/graph-ts": "0.20.0",
+    "@graphprotocol/graph-cli": "^0.24.0",
+    "@graphprotocol/graph-ts": "^0.24.0",
     "mustache": "^4.0.1"
   },
   "devDependencies": {
-    "assemblyscript": "^0.19.20"
+    "assemblyscript": "0.19.10"
   }
 }

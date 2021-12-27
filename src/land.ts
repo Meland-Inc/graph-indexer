@@ -1,16 +1,29 @@
-import { BigInt } from "@graphprotocol/graph-ts";
+import { Address, BigInt } from "@graphprotocol/graph-ts";
 import { RcCoordinates } from "./generated/entities/schema";
+import * as configs from './config';
+import { Land } from './generated/entities/Land/Land';
+import { ItemType_ticketland, ItemType_vipland } from "./enums";
 
-export function isLand(symbol: string): boolean {
-	return symbol.includes('Land');
+export function isLand(address: Address, tokenId: BigInt): boolean {
+    return configs.Land_address == address.toHex();
 }
 
-export function isTicketLand(symbol: string): boolean {
-	return isLand(symbol) && (symbol.includes('ticket') || symbol.includes('Ticket'));
+export function isTicketLand(address: Address, tokenId: BigInt): boolean {
+    if (!isLand(address, tokenId)) {
+        return false;
+    }
+    let land = Land.bind(address);
+    let landtype = land.landtypeById(tokenId);
+    return landtype == ItemType_ticketland;
 }
 
-export function isVipLand(symbol: string): boolean {
-	return isLand(symbol) && (symbol.includes('vip') || symbol.includes('Vip'));
+export function isVipLand(address: Address, tokenId: BigInt): boolean {
+    if (!isLand(address, tokenId)) {
+        return false;
+    }
+    let land = Land.bind(address);
+    let landtype = land.landtypeById(tokenId);
+    return landtype == ItemType_vipland;
 }
 
 export function buildRcCoordinates(landId: BigInt): RcCoordinates {
@@ -24,5 +37,5 @@ export function buildRcCoordinates(landId: BigInt): RcCoordinates {
         rc.r = r;
         rc.save();
     }
-    return rc!;
+    return rc;
 }

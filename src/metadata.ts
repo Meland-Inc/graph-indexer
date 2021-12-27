@@ -1,38 +1,35 @@
 import { ethereum, JSONValue, TypedMap, Entity, Bytes, Address, BigInt, log } from '@graphprotocol/graph-ts';
-import { NFTWithRarity as ERC721 } from './generated/entities/templates/NFTWithRarity/NFTWithRarity';
+import { ERC721 } from './generated/entities/templates/ERC721/ERC721';
 import {
 	Metadata,
 	Placeable as PlaceableSchema,
-	RcCoordinates,
 	Thirdparty,
+	Tier,
 	Tikcetland as TikcetLandSchema,
-	Vipland as ViplandSchema
+	Vipland as ViplandSchema,
+	Viplandfuture,
+	Wearable
 } from './generated/entities/schema';
-import { isPlaceable } from './nft';
+import { getNFTDescByURI, getNFTImageURIByURI, isPlaceable, isTier, isViplandFuture, isWearable } from './nft';
 import { buildRcCoordinates, isTicketLand, isVipLand } from './land';
-import { ItemType_placeable, ItemType_thirdparty, ItemType_ticketland, ItemType_undefined, ItemType_vipland } from './enums';
+import { ItemType_placeable, ItemType_thirdparty, ItemType_ticketland, ItemType_tier, ItemType_undefined, ItemType_vipland, ItemType_viplandfutures, ItemType_wearable } from './enums';
 import { format } from './helper';
+import * as configs from './config';
 
 export function buildPlaceable(nftAddress: Address): PlaceableSchema {
 	let erc721 = ERC721.bind(nftAddress);
-	let cidRv = erc721.try_getCid();
-	let rarityRv = erc721.try_rarity();
+	let cidRv = "erc721.try_getCid();"
+	// let rarityRv = erc721.try_rarity();
 	let rarity = '';
 	let cid = '0';
-	if (!cidRv.reverted) {
-		cid = cidRv.value;
-	}
-	if (!rarityRv.reverted) {
-		rarity = rarityRv.value;
-	}
 	let placeable = PlaceableSchema.load(cid);
 	if (placeable === null) {
 		placeable = new PlaceableSchema(cid);
 		placeable.rarity = rarity;
-		placeable.imageURL = format('https://token-image-release.melandworld.com/{}/{}', [ ItemType_placeable, cid ]);
+		placeable.imageURL = format('https://token-image-release.melandworld.com/{}/{}', [ItemType_placeable, cid]);
 	}
 	placeable.save();
-	return placeable!;
+	return placeable;
 }
 
 export function buildTicketLand(nftAddress: Address, tokenId: BigInt): TikcetLandSchema {
@@ -40,11 +37,11 @@ export function buildTicketLand(nftAddress: Address, tokenId: BigInt): TikcetLan
 	let ticketLand = TikcetLandSchema.load(ticketLandId);
 	if (ticketLand === null) {
 		ticketLand = new TikcetLandSchema(ticketLandId);
-        ticketLand.rcCoordinates = buildRcCoordinates(tokenId).id;
-		ticketLand.imageURL = format('https://token-image-release.melandworld.com/{}/{}', [ ItemType_ticketland, ticketLandId ]);
+		ticketLand.rcCoordinates = buildRcCoordinates(tokenId).id;
+		ticketLand.imageURL = format('https://token-image-release.melandworld.com/{}/{}', [ItemType_ticketland, ticketLandId]);
 	}
 	ticketLand.save();
-	return ticketLand!;
+	return ticketLand;
 }
 
 export function buildVipLand(nftAddress: Address, tokenId: BigInt): ViplandSchema {
@@ -52,63 +49,96 @@ export function buildVipLand(nftAddress: Address, tokenId: BigInt): ViplandSchem
 	let ticketLand = ViplandSchema.load(ticketLandId);
 	if (ticketLand === null) {
 		ticketLand = new ViplandSchema(ticketLandId);
-        ticketLand.rcCoordinates = buildRcCoordinates(tokenId).id;
-		ticketLand.imageURL = format('https://token-image-release.melandworld.com/{}/{}', [ ItemType_vipland, ticketLandId ]);
+		ticketLand.rcCoordinates = buildRcCoordinates(tokenId).id;
+		ticketLand.imageURL = format('https://token-image-release.melandworld.com/{}/{}', [ItemType_vipland, ticketLandId]);
 	}
 	ticketLand.save();
-	return ticketLand!;
+	return ticketLand;
 }
 
-export function buildThirdParty(nftAddress: Address, tokenId: BigInt): Thirdparty {
+export function buildThirdParty(nftAddress: Address, tokenId: BigInt, uri: string): Thirdparty {
 	let thirdparty = Thirdparty.load(tokenId.toString());
 	if (thirdparty === null) {
 		thirdparty = new Thirdparty(tokenId.toString());
-		thirdparty.imageURL = format('https://token-image-release.melandworld.com/{}/{}', [ ItemType_ticketland, tokenId.toString() ]);
+		thirdparty.imageURL = getNFTImageURIByURI(uri);
 	}
 	thirdparty.save();
-	return thirdparty!;
+	return thirdparty;
 }
 
-export function buildMetadata(nftAddress: Address, tokenId: BigInt): Metadata {
-	let erc721 = ERC721.bind(nftAddress);
-	let symbol = erc721.symbol();
-	let rarity = '';
-	let rarityRv = erc721.try_rarity();
-
-	if (!rarityRv.reverted) {
-		rarity = rarityRv.value;
+export function buildWearable(nftAddress: Address, tokenId: BigInt, uri: string): Wearable {
+	let wId = format("{}-{}-{}", [ nftAddress.toHex(), tokenId.toHex(), uri]);
+	let w = Wearable.load(wId);
+	if (w === null) {
+		w = new Wearable(wId);
+		w.imageURL = getNFTImageURIByURI(uri);
 	}
+	w.save();
+	return w;
+}
 
-	let itemType = ItemType_undefined;
-
-	if (isPlaceable(symbol)) {
-		itemType = ItemType_placeable;
-	}else if (isTicketLand(symbol)) {
-		itemType = ItemType_ticketland;
-	}else if (isVipLand(symbol)) {
-		itemType = ItemType_vipland;
-	}else {
-		itemType = ItemType_thirdparty;
+export function buildTier(nftAddress: Address, tokenId: BigInt, uri: string): Tier {
+	let wId = format("{}-{}-{}", [ nftAddress.toHex(), tokenId.toHex(), uri]);
+	let w = Tier.load(wId);
+	if (w === null) {
+		w = new Tier(wId);
+		w.imageURL = getNFTImageURIByURI(uri);
 	}
+	w.save();
+	return w;
+}
 
-	let metadataId: string = format('{}-{}-{}-{}', [ symbol, rarity, nftAddress.toHex(), tokenId.toString() ]);
-	log.info('metadataId: {}', [ metadataId ]);
+export function buildViplandfuture(nftAddress: Address, tokenId: BigInt, uri: string): Viplandfuture {
+	let wId = format("{}-{}-{}", [ nftAddress.toHex(), tokenId.toHex(), uri]);
+	let w = Viplandfuture.load(wId);
+	if (w === null) {
+		w = new Viplandfuture(wId);
+		w.imageURL = getNFTImageURIByURI(uri);
+	}
+	w.save();
+	return w;
+}
+
+export function buildMetadata(
+	nftAddress: Address,
+	tokenId: BigInt,
+	protocol: string,
+	uri: string
+): Metadata {
+	let metadataId: string = format('{}-{}-{}', [nftAddress.toHex(), tokenId.toString(), uri]);
+	log.info('metadataId: {}', [metadataId]);
 	let metadata = Metadata.load(metadataId);
 	if (metadata === null) {
 		metadata = new Metadata(metadataId);
+		metadata.description = getNFTDescByURI(uri);
 	}
 
-	if (isPlaceable(symbol)) {
+	if (isPlaceable(nftAddress)) {
+		metadata.itemType = ItemType_placeable;
 		metadata.placeable = buildPlaceable(nftAddress).id;
-	}else if (isVipLand(symbol)) {
-		metadata.vipland = buildVipLand(nftAddress, tokenId).id;
-	}else if (isTicketLand(symbol)) {
+	} else if (isTicketLand(nftAddress, tokenId)) {
+		metadata.itemType = ItemType_ticketland;
 		metadata.ticketland = buildTicketLand(nftAddress, tokenId).id;
-	}else {
-		metadata.thirdparty = buildThirdParty(nftAddress, tokenId).id;
+	} else if (isVipLand(nftAddress, tokenId)) {
+		metadata.itemType = ItemType_vipland;
+		metadata.vipland = buildVipLand(nftAddress, tokenId).id;
+	} else if (isWearable(nftAddress)) {
+		metadata.itemType = ItemType_wearable;
+		metadata.wearable = buildWearable(nftAddress, tokenId, uri).id;
+	} else if (isTier(nftAddress)) {
+		metadata.itemType = ItemType_tier;
+		metadata.tier = buildTier(nftAddress, tokenId, uri).id;
+	} else if (isViplandFuture(nftAddress)) {
+		metadata.itemType = ItemType_viplandfutures;
+		metadata.viplandfutures = buildViplandfuture(nftAddress, tokenId, uri).id;
 	}
-	metadata.itemType = itemType;
+	else {
+		metadata.itemType = ItemType_thirdparty;
+		metadata.thirdparty = buildThirdParty(nftAddress, tokenId, uri).id;
+	}
+
+	metadata.nftProtocol = protocol;
 	metadata.save();
 
-	return metadata!;
+	return metadata;
 }

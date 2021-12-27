@@ -79,10 +79,22 @@
         "type": "address"
       },
       {
+        "components": [
+          {
+            "internalType": "contract IERC1155",
+            "name": "erc1155",
+            "type": "address"
+          },
+          {
+            "internalType": "contract IERC721",
+            "name": "erc721",
+            "type": "address"
+          }
+        ],
         "indexed": false,
-        "internalType": "contract IERC721",
-        "name": "nftAddress",
-        "type": "address"
+        "internalType": "struct MarketplaceStorage.ERC721Or1155",
+        "name": "nft",
+        "type": "tuple"
       }
     ],
     "name": "OrderCancelled",
@@ -110,10 +122,22 @@
         "type": "address"
       },
       {
+        "components": [
+          {
+            "internalType": "contract IERC1155",
+            "name": "erc1155",
+            "type": "address"
+          },
+          {
+            "internalType": "contract IERC721",
+            "name": "erc721",
+            "type": "address"
+          }
+        ],
         "indexed": false,
-        "internalType": "contract IERC721",
-        "name": "nftAddress",
-        "type": "address"
+        "internalType": "struct MarketplaceStorage.ERC721Or1155",
+        "name": "nft",
+        "type": "tuple"
       },
       {
         "indexed": false,
@@ -153,10 +177,22 @@
         "type": "address"
       },
       {
+        "components": [
+          {
+            "internalType": "contract IERC1155",
+            "name": "erc1155",
+            "type": "address"
+          },
+          {
+            "internalType": "contract IERC721",
+            "name": "erc721",
+            "type": "address"
+          }
+        ],
         "indexed": false,
-        "internalType": "contract IERC721",
-        "name": "nftAddress",
-        "type": "address"
+        "internalType": "struct MarketplaceStorage.ERC721Or1155",
+        "name": "nft",
+        "type": "tuple"
       },
       {
         "indexed": false,
@@ -455,7 +491,7 @@
   {
     "inputs": [
       {
-        "internalType": "contract IERC721",
+        "internalType": "address",
         "name": "",
         "type": "address"
       },
@@ -483,9 +519,21 @@
         "type": "uint256"
       },
       {
-        "internalType": "contract IERC721",
-        "name": "nftAddress",
-        "type": "address"
+        "components": [
+          {
+            "internalType": "contract IERC1155",
+            "name": "erc1155",
+            "type": "address"
+          },
+          {
+            "internalType": "contract IERC721",
+            "name": "erc721",
+            "type": "address"
+          }
+        ],
+        "internalType": "struct MarketplaceStorage.ERC721Or1155",
+        "name": "nft",
+        "type": "tuple"
       },
       {
         "internalType": "uint256",
@@ -703,7 +751,7 @@
         "type": "uint256"
       }
     ],
-    "name": "createOrder",
+    "name": "createOrderWith721",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -711,7 +759,35 @@
   {
     "inputs": [
       {
-        "internalType": "contract IERC721",
+        "internalType": "contract IERC1155",
+        "name": "nftAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "assetId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "priceInWei",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "expiresAt",
+        "type": "uint256"
+      }
+    ],
+    "name": "createOrderWith1155",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
         "name": "nftAddress",
         "type": "address"
       },
@@ -729,7 +805,7 @@
   {
     "inputs": [
       {
-        "internalType": "contract IERC721",
+        "internalType": "address",
         "name": "nftAddress",
         "type": "address"
       },
@@ -752,7 +828,7 @@
   {
     "inputs": [
       {
-        "internalType": "contract IERC721",
+        "internalType": "address",
         "name": "nftAddress",
         "type": "address"
       },
@@ -775,7 +851,7 @@
   {
     "inputs": [
       {
-        "internalType": "contract IERC721",
+        "internalType": "address",
         "name": "nft",
         "type": "address"
       },

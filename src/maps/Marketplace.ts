@@ -7,37 +7,49 @@ import {
 	OrderUpdated
 } from '../generated/entities/Marketplace/Marketplace';
 import { NFT, Order } from '../generated/entities/schema';
-import { addNFTProperty, buildSupplyQuantity, buildNFT } from '../nft';
-import { OrderStatus_cancelled, OrderStatus_open, OrderStatus_sold } from '../enums';
+import { buildNFT } from '../nft';
+import { NFTProtocol_erc1155, NFTProtocol_erc721, OrderStatus_cancelled, OrderStatus_open, OrderStatus_sold } from '../enums';
 import { buildAccount } from '../account';
-import { buildMetadata } from '../metadata';
 import { boughtLog, cancelorderLog, createorderLog, updateorderLog } from '../log';
+import { Address } from '@graphprotocol/graph-ts';
 
 export function handleOrderCreated(event: OrderCreated): void {
 	let orderId = event.params.id.toHex();
-	let nftAddress = event.params.nftAddress;
+	let nft = event.params.nft;
 	let nftTokenId = event.params.assetId;
+	let nftProtocol = "";
+	let nftAddress = Address.zero();
+
+	if (nft.erc1155 != Address.zero()) {
+		nftAddress = nft.erc1155;
+		nftProtocol = NFTProtocol_erc1155;
+	} else {
+		nftAddress = nft.erc721
+		nftProtocol = NFTProtocol_erc721;
+	}
 	let order = new Order(orderId);
 	order.blockNumber = event.block.number;
 	order.createdAt = event.block.timestamp;
 	order.expiresAt = event.params.expiresAt;
 	order.nftAddress = nftAddress;
-	order = addNFTProperty(order, nftAddress);
-	let nft = buildNFT(event.block, nftAddress, nftTokenId);
-	nft.activeOrder = order.id;
-	nft.save();
-	order.nft = nft.id;
+	let nftEn = buildNFT(nftAddress, nftTokenId, event.block.timestamp, nftProtocol);
+	nftEn.activeOrder = order.id;
+	nftEn.save();
+	order.symbol = nftEn.symbol;
+	order.rarity = nftEn.rarity;
+	order.name = nftEn.name;
+	order.nft = nftEn.id;
 	order.txHash = event.block.hash;
-	order.metadata = buildMetadata(nftAddress, nftTokenId).id;
+	order.metadata = nftEn.metadata;
 	order.owner = buildAccount(event.params.seller).id;
 	order.price = event.params.priceInWei;
 	order.status = OrderStatus_open;
-	order.supplyQuantity = buildSupplyQuantity(nftAddress).id;
+	order.supplyQuantity = nftEn.supplyQuantity;
 	order.tokenId = event.params.assetId;
 	order.updatedAt = event.block.timestamp;
 	order.save();
 
-	createorderLog(event, order!);
+	createorderLog(event, order);
 }
 
 export function handleOrderSuccessful(event: OrderSuccessful): void {
@@ -72,7 +84,7 @@ export function handleOrderCancelled(event: OrderCancelled): void {
 	order.status = OrderStatus_cancelled;
 	order.save();
 
-	cancelorderLog(event, order!);
+	cancelorderLog(event, order);
 }
 
 export function handleOrderUpdated(event: OrderUpdated): void {
@@ -82,9 +94,9 @@ export function handleOrderUpdated(event: OrderUpdated): void {
 	order.price = event.params.priceInWei;
 	order.save();
 
-	updateorderLog(event, order!);
+	updateorderLog(event, order);
 }
 
-export function handleChangedPublicationFee(event: ChangedPublicationFee): void {}
+export function handleChangedPublicationFee(event: ChangedPublicationFee): void { }
 
-export function handleChangedOwnerCutPerMillion(event: ChangedOwnerCutPerMillion): void {}
+export function handleChangedOwnerCutPerMillion(event: ChangedOwnerCutPerMillion): void { }

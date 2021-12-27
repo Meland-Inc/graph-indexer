@@ -3,63 +3,172 @@ schema:
   file: ./schema.graphql
 dataSources:
   - kind: ethereum/contract
-    name: TicketLand
+    name: Land
     network: {{network}}
     source:
       startBlock: {{start_block}}
-      address: '{{TicketLand_address}}'
-      abi: TicketLand
+      address: '{{Land_address}}'
+      abi: Land
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
         - NFT
       abis:
-        - name: TicketLand
-          file: ./abis/TicketLand.json
-        - name: VipLand
-          file: ./abis/VipLand.json
-        - name: NFTWithRarity
-          file: ./abis/NFTWithRarity.json
+        - name: Land
+          file: ./abis/Meland1155Land.json
+        - name: ERC721
+          file: ./abis/ERC721.json
+        - name: ERC1155
+          file: ./abis/ERC1155.json
         - name: MELD
           file: ./abis/MELD.json
+        - name: Marketplace
+          file: ./abis/Marketplace.json
+        - name: NFTStore
+          file: ./abis/NFTStore.json
+        - name: NFTFactory
+          file: ./abis/NFTFactory.json
+        - name: Meland1155MELDFutures
+          file: ./abis/Meland1155MELDFuture.json
+        - name: MelandTier
+          file: ./abis/MelandTier.json
       eventHandlers:
-        - event: RoleGranted(indexed bytes32,indexed address,indexed address)
-          handler: handleRoleGranted
-        - event: Transfer(indexed address,indexed address,indexed uint256)
-          handler: handleTransfer
-      file: ./src/maps/TicketLand.ts
+        - event: TransferSingle(indexed address,indexed address,indexed address,uint256,uint256)
+          handler: handleTransferSingle
+        - event: TransferBatch(indexed address,indexed address,indexed address,uint256[],uint256[])
+          handler: handleTransferBatch
+      file: ./src/maps/Land.ts
   - kind: ethereum/contract
-    name: VipLand
+    name: Wearable
     network: {{network}}
     source:
       startBlock: {{start_block}}
-      address: '{{VipLand_address}}'
-      abi: VipLand
+      address: '{{Meland1155Wearable_address}}'
+      abi: MelandWearable
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
         - NFT
       abis:
-        - name: VipLand
-          file: ./abis/VipLand.json
-        - name: TicketLand
-          file: ./abis/TicketLand.json
-        - name: VipLand
-          file: ./abis/VipLand.json
-        - name: NFTWithRarity
-          file: ./abis/NFTWithRarity.json
+        - name: Land
+          file: ./abis/Meland1155Land.json
+        - name: ERC721
+          file: ./abis/ERC721.json
+        - name: ERC1155
+          file: ./abis/ERC1155.json
         - name: MELD
           file: ./abis/MELD.json
+        - name: Marketplace
+          file: ./abis/Marketplace.json
+        - name: NFTStore
+          file: ./abis/NFTStore.json
+        - name: NFTFactory
+          file: ./abis/NFTFactory.json
+        - name: Meland1155MELDFutures
+          file: ./abis/Meland1155MELDFuture.json
+        - name: MelandTier
+          file: ./abis/MelandTier.json
+        - name: MelandWearable
+          file: ./abis/Meland1155Wearable.json
       eventHandlers:
-        - event: RoleGranted(indexed bytes32,indexed address,indexed address)
-          handler: handleRoleGranted
-        - event: Transfer(indexed address,indexed address,indexed uint256)
-          handler: handleTransfer
-      file: ./src/maps/VipLand.ts
+        - event: TransferSingle(indexed address,indexed address,indexed address,uint256,uint256)
+          handler: handleTransferSingle
+        - event: TransferBatch(indexed address,indexed address,indexed address,uint256[],uint256[])
+          handler: handleTransferBatch
+      file: ./src/maps/Wearable.ts
+  - kind: ethereum/contract
+    name: LandFuture
+    network: {{network}}
+    source:
+      startBlock: {{start_block}}
+      address: '{{Meland1155Wearable_address}}'
+      abi: MelandWearable
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - NFT
+      abis:
+        - name: Land
+          file: ./abis/Meland1155Land.json
+        - name: ERC721
+          file: ./abis/ERC721.json
+        - name: ERC1155
+          file: ./abis/ERC1155.json
+        - name: MELD
+          file: ./abis/MELD.json
+        - name: Marketplace
+          file: ./abis/Marketplace.json
+        - name: NFTStore
+          file: ./abis/NFTStore.json
+        - name: NFTFactory
+          file: ./abis/NFTFactory.json
+        - name: Meland1155MELDFutures
+          file: ./abis/Meland1155MELDFuture.json
+        - name: MelandTier
+          file: ./abis/MelandTier.json
+        - name: MelandWearable
+          file: ./abis/Meland1155Wearable.json
+        - name: Meland1155LandFuture
+          file: ./abis/Meland1155LandFuture.json
+      eventHandlers:
+        - event: TransferSingle(indexed address,indexed address,indexed address,uint256,uint256)
+          handler: handleTransferSingle
+        - event: TransferBatch(indexed address,indexed address,indexed address,uint256[],uint256[])
+          handler: handleTransferBatch
+      file: ./src/maps/LandFuture.ts
+  - kind: ethereum/contract
+    name: Tier
+    network: {{network}}
+    source:
+      startBlock: {{start_block}}
+      address: '{{MelandTier_address}}'
+      abi: MelandTier
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - NFT
+        - Reward
+      abis:
+        - name: Land
+          file: ./abis/Meland1155Land.json
+        - name: ERC721
+          file: ./abis/ERC721.json
+        - name: ERC1155
+          file: ./abis/ERC1155.json
+        - name: MELD
+          file: ./abis/MELD.json
+        - name: Marketplace
+          file: ./abis/Marketplace.json
+        - name: NFTStore
+          file: ./abis/NFTStore.json
+        - name: NFTFactory
+          file: ./abis/NFTFactory.json
+        - name: Meland1155MELDFutures
+          file: ./abis/Meland1155MELDFuture.json
+        - name: MelandTier
+          file: ./abis/MelandTier.json
+      eventHandlers:
+        - event: TransferSingle(indexed address,indexed address,indexed address,uint256,uint256)
+          handler: handleTransferSingle
+        - event: TransferBatch(indexed address,indexed address,indexed address,uint256[],uint256[])
+          handler: handleTransferBatch
+        - event: CreateRewardERC1155(indexed uint256,indexed uint256,(address,uint256[],uint256[]))
+          handler: handleCreateRewardERC1155
+        - event: CreateRewardERC20(indexed uint256,indexed uint256,(address,uint256))
+          handler: handleCreateRewardERC20
+        - event: CreateRewardERC721(indexed uint256,indexed uint256,(address,uint256))
+          handler: handleCreateRewardERC721
+        - event: OpenTier(uint256[2])
+          handler: handleOpenTier
+      file: ./src/maps/Tier.ts
   - kind: ethereum/contract
     name: NFTFactory
     network: {{network}}
@@ -69,23 +178,29 @@ dataSources:
       abi: NFTFactory
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
         - Directory
       abis:
-        - name: NFTFactory
-          file: ./abis/NFTFactory.json
-        - name: TicketLand
-          file: ./abis/TicketLand.json
-        - name: VipLand
-          file: ./abis/VipLand.json
-        - name: NFTWithRarity
-          file: ./abis/NFTWithRarity.json
+        - name: Land
+          file: ./abis/Meland1155Land.json
+        - name: ERC721
+          file: ./abis/ERC721.json
+        - name: ERC1155
+          file: ./abis/ERC1155.json
         - name: MELD
           file: ./abis/MELD.json
+        - name: Marketplace
+          file: ./abis/Marketplace.json
+        - name: NFTStore
+          file: ./abis/NFTStore.json
+        - name: NFTFactory
+          file: ./abis/NFTFactory.json
+        - name: Meland1155MELDFutures
+          file: ./abis/Meland1155MELDFuture.json
       eventHandlers:
-        - event: NFTSupportCreate(address,address,uint256)
+        - event: NFTSupportCreate((address,address),address,uint256)
           handler: handleNFTSupportCreate
       file: ./src/maps/NFTFactory.ts
   - kind: ethereum/contract
@@ -97,31 +212,43 @@ dataSources:
       abi: NFTStore
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
         - NFTStoreItem
       abis:
-        - name: NFTStore
-          file: ./abis/NFTStore.json
-        - name: TicketLand
-          file: ./abis/TicketLand.json
-        - name: VipLand
-          file: ./abis/VipLand.json
-        - name: NFTWithRarity
-          file: ./abis/NFTWithRarity.json
+        - name: Land
+          file: ./abis/Meland1155Land.json
+        - name: ERC721
+          file: ./abis/ERC721.json
+        - name: ERC1155
+          file: ./abis/ERC1155.json
         - name: MELD
           file: ./abis/MELD.json
+        - name: Marketplace
+          file: ./abis/Marketplace.json
+        - name: NFTStore
+          file: ./abis/NFTStore.json
+        - name: NFTFactory
+          file: ./abis/NFTFactory.json
+        - name: Meland1155MELDFutures
+          file: ./abis/Meland1155MELDFuture.json
+        - name: IMelandStoreItems
+          file: ./abis/IMelandStoreItems.json
+        - name: MelandTier
+          file: ./abis/MelandTier.json
+        - name: MelandWearable
+          file: ./abis/Meland1155Wearable.json
+        - name: Meland1155LandFuture
+          file: ./abis/Meland1155LandFuture.json
       eventHandlers:
-        - event: NFTBuyed(indexed uint256,indexed address,address,uint256,uint256)
+        - event: NFTBuyed(indexed address,indexed address,string,uint256,uint256)
           handler: handleNFTBuyed
-        - event: NFTCreated(indexed uint256,indexed address,address,uint256)
+        - event: NFTCreated(address)
           handler: handleNFTCreated
-        - event: NFTDelete(indexed uint256,indexed address,address)
+        - event: NFTDelete(address)
           handler: handleNFTDelete
-        - event: NFTIdPoolUpdate(indexed uint256,indexed address,uint256)
-          handler: handleNFTIdPoolUpdate
-        - event: NFTItemUpdate(indexed uint256,address)
+        - event: NFTItemUpdate(address,bool)
           handler: handleNFTItemUpdate
       file: ./src/maps/NFTStore.ts
   - kind: ethereum/contract
@@ -133,27 +260,37 @@ dataSources:
       abi: Marketplace
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
         - Order
       abis:
-        - name: Marketplace
-          file: ./abis/Marketplace.json
-        - name: TicketLand
-          file: ./abis/TicketLand.json
-        - name: VipLand
-          file: ./abis/VipLand.json
-        - name: NFTWithRarity
-          file: ./abis/NFTWithRarity.json
+        - name: Land
+          file: ./abis/Meland1155Land.json
+        - name: ERC721
+          file: ./abis/ERC721.json
+        - name: ERC1155
+          file: ./abis/ERC1155.json
         - name: MELD
           file: ./abis/MELD.json
+        - name: Marketplace
+          file: ./abis/Marketplace.json
+        - name: NFTStore
+          file: ./abis/NFTStore.json
+        - name: NFTFactory
+          file: ./abis/NFTFactory.json
+        - name: Meland1155MELDFutures
+          file: ./abis/Meland1155MELDFuture.json
+        - name: MelandWearable
+          file: ./abis/Meland1155Wearable.json
+        - name: Meland1155LandFuture
+          file: ./abis/Meland1155LandFuture.json
       eventHandlers:
-        - event: OrderCreated(bytes32,indexed uint256,indexed address,address,uint256,uint256)
+        - event: OrderCreated(bytes32,indexed uint256,indexed address,(address,address),uint256,uint256)
           handler: handleOrderCreated
-        - event: OrderSuccessful(bytes32,indexed uint256,indexed address,address,uint256,indexed address)
+        - event: OrderSuccessful(bytes32,indexed uint256,indexed address,(address,address),uint256,indexed address)
           handler: handleOrderSuccessful
-        - event: OrderCancelled(bytes32,indexed uint256,indexed address,address)
+        - event: OrderCancelled(bytes32,indexed uint256,indexed address,(address,address))
           handler: handleOrderCancelled
         - event: OrderUpdated(bytes32,uint256,uint256)
           handler: handleOrderUpdated
@@ -171,37 +308,95 @@ dataSources:
       abi: MELD
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
         - MELD
       abis:
+        - name: Land
+          file: ./abis/Meland1155Land.json
+        - name: ERC721
+          file: ./abis/ERC721.json
+        - name: ERC1155
+          file: ./abis/ERC1155.json
         - name: MELD
           file: ./abis/MELD.json
+        - name: Marketplace
+          file: ./abis/Marketplace.json
+        - name: NFTStore
+          file: ./abis/NFTStore.json
+        - name: NFTFactory
+          file: ./abis/NFTFactory.json
+        - name: Meland1155MELDFutures
+          file: ./abis/Meland1155MELDFuture.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
       file: ./src/maps/MELD.ts
 templates:
-  - name: NFTWithRarity
+  - name: ERC721
     kind: ethereum/contract
-    network: mumbai
+    network: {{network}}
     source:
-      abi: NFTWithRarity
+      abi: ERC721
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
-      file: ./src/maps/NFT.ts
+      file: ./src/maps/NFT721.ts
       entities:
-        - NFTWithRarity
+        - ERC721
       abis:
-        - name: NFTWithRarity
-          file: ./abis/NFTWithRarity.json
+        - name: Land
+          file: ./abis/Meland1155Land.json
+        - name: ERC721
+          file: ./abis/ERC721.json
+        - name: ERC1155
+          file: ./abis/ERC1155.json
         - name: MELD
           file: ./abis/MELD.json
+        - name: Marketplace
+          file: ./abis/Marketplace.json
+        - name: NFTStore
+          file: ./abis/NFTStore.json
+        - name: NFTFactory
+          file: ./abis/NFTFactory.json
+        - name: Meland1155MELDFutures
+          file: ./abis/Meland1155MELDFuture.json
       eventHandlers:
-        - event: RoleGranted(indexed bytes32,indexed address,indexed address)
-          handler: handleRoleGranted
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer
+  - name: ERC1155
+    kind: ethereum/contract
+    network: {{network}}
+    source:
+      abi: ERC1155
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/maps/NFT1155.ts
+      entities:
+        - ERC1155
+      abis:
+        - name: Land
+          file: ./abis/Meland1155Land.json
+        - name: ERC721
+          file: ./abis/ERC721.json
+        - name: ERC1155
+          file: ./abis/ERC1155.json
+        - name: MELD
+          file: ./abis/MELD.json
+        - name: Marketplace
+          file: ./abis/Marketplace.json
+        - name: NFTStore
+          file: ./abis/NFTStore.json
+        - name: NFTFactory
+          file: ./abis/NFTFactory.json
+        - name: Meland1155MELDFutures
+          file: ./abis/Meland1155MELDFuture.json
+      eventHandlers:
+        - event: TransferSingle(indexed address,indexed address,indexed address,uint256,uint256)
+          handler: handleTransferSingle
+        - event: TransferBatch(indexed address,indexed address,indexed address,uint256[],uint256[])
+          handler: handleTransferBatch

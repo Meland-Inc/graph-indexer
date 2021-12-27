@@ -1,12 +1,15 @@
 {
     "network": "mumbai",
-    "VipLand_address": "0x8dB8dcf179c6073adcb2e7cb8fb07E9c1dBfBdFB",
-    "TicketLand_address": "0x8dB8dcf179c6073adcb2e7cb8fb07E9c1dBfBdFB",
-    "NFTStore_address": "0x5663087390ac972c01491cd05F62305FBC100389",
-    "Marketplace_address": "0x43592DAdC9Eaa8711AE267A6d1197D26c3219880",
-    "MELD_address": "0x62C7500B45d39ec64030FE44acB9a1037f1F127D",
-    "NFTFactory_address": "0x0069aF6fA3953Ed9320FEf32B58FD897c5Bddd38",
-    "Faucet_address": "0xa7f24dFDc1993057b7F92AAEBA3bc3fC1fc4f91E",
-    "VestPool_address": "0x4f986fa15223fBd7a70ed2ebE503FFD9CdaFe8d4",
-    "start_block": "21743671"
+    "Land_address": "0x407094e035ff8dC5817f81d78C671d89BfF39Fa0",
+    "NFTStore_address": "0x3b917FC9B952f9639215E9C6C5DE9BE70426Dc52",
+    "Marketplace_address": "0x166d1B74ac3eE94aC8638C6b040b6d1aC42c81E6",
+    "MELD_address": "0xd9e9652BE7eB0455884bE8b56A25c9c67297e810",
+    "NFTFactory_address": "0x7934e0e3AC2841B8B66A56676E1D4e887cC0e6b0",
+    "Faucet_address": "",
+    "VestPool_address": "",
+    "Meland1155Wearable_address": "0x7863a968b9ECf0f239eB4008Cba39fD63425323C",
+    "Meland1155Placeable_address": "",
+    "Meland1155LandFuture_address": "0x6F6c65387DeBd2293c111373d54fb927F0b41F27",
+    "MelandTier_address": "0xe48c7307d8684707B1f42c858fbc1d5E2C7e4ddB",
+    "start_block": "23090652"
 }
