@@ -1,6 +1,6 @@
 import { NFTBuyed, NFTCreated, NFTDelete, NFTItemUpdate, NFTStore } from '../generated/entities/NFTStore/NFTStore';
 import { BigInt, Bytes, log, http, store, Address } from '@graphprotocol/graph-ts';
-import { NFT, NFTStoreItem, SupplyQuantity } from '../generated/entities/schema';
+import { ERC20, NFT, NFTStoreItem, NFTStoreItemAll, SupplyQuantity } from '../generated/entities/schema';
 import { buildMetadata } from '../metadata';
 import { buildNFT, buildNFTId, buildNFTSymbolWithURI, buildSupplyQuantity, getMintMaxByURI, getNFTNameByURI, getNFTRarityByURI } from '../nft';
 import { NFTStoreStatus_open, NFTStoreStatus_cancelled, NFTProtocol_erc1155 } from '../enums';
@@ -27,15 +27,27 @@ export function handleNFTBuyed(event: NFTBuyed): void {
 	let nftId = buildNFTId(nftAddress, tokenId);
 	let nft = NFT.load(nftId)!;
 
-	boughtLog(event, nft, event.params.priceInWei);
+	let erc20Token = buildAcceptedToken(Address.fromString(storeItemOfNFT.acceptedToken));
+
+	boughtLog(event, nft, event.params.priceInWei, erc20Token);
 }
 
 // 上架索引
 export function handleNFTCreated(event: NFTCreated): void {
-	buildStoreItem(event.params.nftAddress, event.block.number, event.transaction.hash, event.block.timestamp);
+	let collectionId = event.params.nftAddress.toHex();
+	let coll = NFTStoreItemAll.load(collectionId);
+
+	if (!coll) {
+		coll = new NFTStoreItemAll(collectionId);
+		coll.items = [];
+		coll.save();
+	}
+
+	buildStoreItem(coll, event.params.nftAddress, event.block.number, event.transaction.hash, event.block.timestamp);
 }
 
 function buildStoreItem(
+	collection: NFTStoreItemAll,
 	nftAddress: Address,
 	blockNumber: BigInt,
 	txHash: Bytes,
@@ -63,6 +75,8 @@ function buildStoreItem(
 			limit = try_limit.value.value1;
 		}
 
+		let idsResult = item.melandStoreItemsRestrictPurchaseNFTIds(symbol);
+
 		let receipt = item.melandStoreReceipt(symbol);
 
 		let tokenURI = format("https://token-metadata-release.melandworld.com/wearable/cid/{}", [symbol]);
@@ -76,6 +90,10 @@ function buildStoreItem(
 		if (storeItemOfNFT == null) {
 			storeItemOfNFT = new NFTStoreItem(stroeItemId);
 			storeItemOfNFT.currentStockQuantity = getMintMaxByURI(tokenURI);
+		}
+
+		if (idsResult.value0) {
+			storeItemOfNFT.currentStockQuantity = BigInt.fromI32(idsResult.value1.length);
 		}
 
 		let status = NFTStoreStatus_cancelled;
@@ -102,10 +120,11 @@ function buildStoreItem(
 		storeItemOfNFT.name = getNFTNameByURI(tokenURI);
 		storeItemOfNFT.rarity = getNFTRarityByURI(tokenURI);
 		storeItemOfNFT.tokenURI = tokenURI;
-		storeItemOfNFT.supplyQuantity = buildSupplyQuantity(nftAddress, tokenURI).id;
+		storeItemOfNFT.supplyQuantity = buildSupplyQuantity(nftAddress, tokenURI, storeItemOfNFT.currentStockQuantity).id;
 		storeItemOfNFT.createdAt = timestamp;
 		storeItemOfNFT.blockNumber = blockNumber;
 		storeItemOfNFT.limit = limit;
+		storeItemOfNFT.collection = collection.id;
 		storeItemOfNFT.txHash = txHash;
 		storeItemOfNFT.nftAddress = nftAddress;
 		storeItemOfNFT.metadata = buildMetadata(nftAddress, BigInt.fromI32(0), NFTProtocol_erc1155, tokenURI).id;
@@ -118,6 +137,13 @@ function buildStoreItem(
 			storeItemOfNFT.status = NFTStoreStatus_cancelled;
 		}
 
+		if (!collection.items.includes(storeItemOfNFT.id)) {
+			let items = collection.items;
+			items.push(storeItemOfNFT.id);
+			collection.items = items;
+			collection.save();
+		}
+
 		storeItemOfNFT.save();
 	}
 }
@@ -126,5 +152,17 @@ export function handleNFTDelete(event: NFTDelete): void { }
 
 
 export function handleNFTItemUpdate(event: NFTItemUpdate): void {
-	buildStoreItem(event.params.nftAddress, event.block.number, event.transaction.hash, event.block.timestamp);
+	let collectionId = event.params.nftAddress.toHex();
+	let coll = NFTStoreItemAll.load(collectionId)!;
+
+	coll.items.forEach(item => {
+		log.info("cancel item {}", [item]);
+		let i = NFTStoreItem.load(item);
+		if (i) {
+			i.status = NFTStoreStatus_cancelled;
+			i.save();
+		}
+	});
+
+	buildStoreItem(coll, event.params.nftAddress, event.block.number, event.transaction.hash, event.block.timestamp);
 }

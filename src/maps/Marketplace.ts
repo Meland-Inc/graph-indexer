@@ -12,6 +12,8 @@ import { NFTProtocol_erc1155, NFTProtocol_erc721, OrderStatus_cancelled, OrderSt
 import { buildAccount } from '../account';
 import { boughtLog, cancelorderLog, createorderLog, updateorderLog } from '../log';
 import { Address } from '@graphprotocol/graph-ts';
+import { buildAcceptedToken } from '../token';
+import * as configs from '../config';
 
 export function handleOrderCreated(event: OrderCreated): void {
 	let orderId = event.params.id.toHex();
@@ -67,7 +69,9 @@ export function handleOrderSuccessful(event: OrderSuccessful): void {
 	order.buyer = event.params.buyer;
 	order.save();
 
-	boughtLog(event, nft!, order.price);
+	let erc20 = buildAcceptedToken(Address.fromString(configs.MELD_address));
+
+	boughtLog(event, nft!, order.price, erc20);
 }
 
 export function handleOrderCancelled(event: OrderCancelled): void {

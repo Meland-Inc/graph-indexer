@@ -12,9 +12,9 @@ export function buildAccount(accountAddress: Address): Account {
 		account = new Account(accountId);
         account.address = accountAddress;
 		account.balanceOfMELD = instanceOfMELD.balanceOf(accountAddress);
+		account.imageURL = format("https://token-image-release.melandworld.com/account/{}", [ accountId ]);
+		account.save();
 	}
-    account.imageURL = format("https://token-image-release.melandworld.com/account/{}", [ accountId ]);
-    account.save();
     return account;
 }
 
@@ -22,6 +22,5 @@ export function refreshMELDBalance(accountAddress: Address): void {
 	let instanceOfMELD = MELD.bind(Address.fromString(MELD_address));
 	let account = buildAccount(accountAddress);
 	account.balanceOfMELD = instanceOfMELD.balanceOf(accountAddress);
-
 	account.save()
 }

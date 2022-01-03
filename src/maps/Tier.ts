@@ -7,6 +7,7 @@ import { buildReward } from '../reward';
 import { ERC1155Reward, OpenMelandTierReward } from '../generated/entities/schema';
 import { NFTProtocol_erc1155 } from '../enums';
 import { BigInt } from '@graphprotocol/graph-ts';
+import { format } from '../helper';
 
 export function handleTransferSingle(event: TransferSingle): void {
     let nft = buildNFT(
@@ -53,7 +54,7 @@ export function handleOpenTier(event: OpenTier): void {
     let rewardIds = event.params.rewardIds;
     for (let i = 0; i < rewardIds.length; i++) {
         if (rewardIds[i].gt(BigInt.zero())) {
-            let omtr = new OpenMelandTierReward(event.transaction.hash.toHex());
+            let omtr = new OpenMelandTierReward(format("{}-{}", [ event.transaction.hash.toHex(), i.toString() ]));
             omtr.txHash = event.transaction.hash;
             omtr.reward = rewardIds[i].toString();
             omtr.save();
@@ -66,7 +67,7 @@ export function handleCreateRewardERC1155(event: CreateRewardERC1155): void {
     let reward = buildReward(event.params.rewardId);
     for (let i = 0; i < event.params.erc1155reward.tokenIds.length; i++) {
         let erc1155RewardTokenId = event.params.erc1155reward.tokenIds[i];
-        let erc1155Rewward = new ERC1155Reward(event.params.erc1155RewardId.toString());
+        let erc1155Rewward = new ERC1155Reward(format("{}-{}", [ event.params.erc1155RewardId.toString(), erc1155RewardTokenId.toString() ]));
         erc1155Rewward.reward = reward.id;
         erc1155Rewward.nft = buildNFT(
             event.params.erc1155reward.erc1155,

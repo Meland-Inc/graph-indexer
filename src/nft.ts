@@ -17,9 +17,17 @@ export function buildNFTId(addressOfNFT: Address, tokenId: BigInt): string {
 
 export function fetchMetadata(uri: string): TypedMap<string, JSONValue> {
 
-	// TODO
 	if (uri.includes("ticketland")) {
 		uri = "https://token-metadata-release.melandworld.com/land/ticketland/";
+	}
+
+	if (uri.includes("viplandfuture")) {
+		let xs = uri.split("/");
+		let s = 'vipland4x4';
+		if (xs[xs.length - 2]) {
+			s = xs[xs.length - 2];
+		}
+		uri = format("https://token-metadata-release.melandworld.com/viplandfuture/{}", [ s ]);
 	}
 
 	let storeId = Bytes.fromUTF8(uri).toHex();
@@ -246,17 +254,17 @@ export function buildNFT(
 ): NFTSchema {
 	let nftId = buildNFTId(addressOfNFT, tokenId);
 	let nft = NFTSchema.load(nftId);
-	let tokenURI = getNFTTokenURI(addressOfNFT, tokenId, protocol);
-	let rarity = getNFTRarityByURI(tokenURI);
 	if (nft === null) {
+		let tokenURI = getNFTTokenURI(addressOfNFT, tokenId, protocol);
+		let rarity = getNFTRarityByURI(tokenURI);
 		nft = new NFTSchema(nftId);
 		nft.tokenId = tokenId;
 		nft.tokenURI = tokenURI;
 		nft.rarity = rarity;
-		nft.supplyQuantity = buildSupplyQuantity(addressOfNFT, tokenURI).id;
+		nft.supplyQuantity = buildSupplyQuantity(addressOfNFT, tokenURI, BigInt.zero()).id;
 		nft.symbol = buildNFTSymbol(addressOfNFT, tokenId);
 		nft.isMeLandAI = isMeLandAI(addressOfNFT);
-		nft.name = getNFTName(addressOfNFT, tokenId);
+		nft.name = getNFTNameByURI(tokenURI);
 		nft.soldAt = timestamp;
 		nft.createdAt = timestamp;
 		nft.updatedAt = timestamp;
@@ -272,19 +280,31 @@ export function buildNFT(
 	return nft;
 }
 
-export function buildSupplyQuantity(addressOfNFT: Address, uri: string): SupplyQuantity {
+export function buildSupplyQuantity(addressOfNFT: Address, uri: string, max: BigInt): SupplyQuantity {
 	let supplyQuantityId = format("{}-{}", [
 		addressOfNFT.toHex(),
 		uri
 	]);
 	let supplyQuantity = SupplyQuantity.load(supplyQuantityId);
+	let save = false;
 	if (supplyQuantity === null) {
 		supplyQuantity = new SupplyQuantity(supplyQuantityId);
 		supplyQuantity.soldCount = BigInt.fromI32(0);
+		save = true;
 	}
-	// 最大供应量
-	supplyQuantity.maxSupply = getMintMaxByURI(uri);
-	supplyQuantity.save();
+
+	if (max.le(BigInt.zero())) {
+		supplyQuantity.maxSupply = getMintMaxByURI(uri);
+		save = true;
+	} else if (supplyQuantity.maxSupply.notEqual(max)) {
+		supplyQuantity.maxSupply = max;
+		save = true;
+	}
+
+	if (save) {
+		supplyQuantity.save();
+	}
+
 	return supplyQuantity;
 }
 

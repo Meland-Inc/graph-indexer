@@ -85,7 +85,7 @@ dataSources:
     network: {{network}}
     source:
       startBlock: {{start_block}}
-      address: '{{Meland1155Wearable_address}}'
+      address: '{{Meland1155LandFuture_address}}'
       abi: MelandWearable
     mapping:
       kind: ethereum/events

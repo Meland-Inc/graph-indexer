@@ -86,6 +86,7 @@ type OpenMelandTierReward @entity {
 type BoughtLog @entity {
 	id: ID!
 	nft: NFT!
+	acceptedToken: ERC20!
 	priceInWei: BigInt!
 }
 
@@ -155,8 +156,10 @@ type Tikcetland @entity {
 # 放置类道具
 type Placeable @entity {
 	id: ID!
+
 	rarity: String!
 	imageURL: String!
+	cid: String!
 }
 
 type Thirdparty @entity {
@@ -167,6 +170,7 @@ type Thirdparty @entity {
 type Wearable @entity {
 	id: ID!
 	imageURL: String!
+	cid: String!
 }
 
 type Tier @entity {
@@ -281,8 +285,14 @@ type NFTStoreItemBuyCallbackStateStore @entity {
 	buyCallbackStates: String!
 }
 
+type NFTStoreItemAll @entity {
+	id: ID!
+	items: [NFTStoreItem!]!
+}
+
 type NFTStoreItem @entity {
 	id: ID!
+	collection: NFTStoreItemAll!
 	nftAddress: Bytes!
 	txHash: Bytes!
 	tokenURI: String

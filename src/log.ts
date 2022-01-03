@@ -1,4 +1,4 @@
-import { CreateorderLog, Web3Log, BoughtLog, TransferLog, NFT, Order, CancelorderLog, UpdateorderLog } from './generated/entities/schema';
+import { CreateorderLog, Web3Log, BoughtLog, TransferLog, NFT, Order, CancelorderLog, UpdateorderLog, ERC20 } from './generated/entities/schema';
 import { ethereum } from '@graphprotocol/graph-ts/chain/ethereum';
 import { Address, BigInt } from '@graphprotocol/graph-ts';
 import { buildAccount } from './account';
@@ -83,11 +83,12 @@ export function transferLog(
 	return log;
 }
 
-export function boughtLog(event: ethereum.Event, nft: NFT, priceInWei: BigInt): Web3Log {
+export function boughtLog(event: ethereum.Event, nft: NFT, priceInWei: BigInt, token: ERC20): Web3Log {
 	let logId = event.transaction.hash.toHex();
 	let boughtLog = new BoughtLog(logId);
 	boughtLog.nft = nft.id;
 	boughtLog.priceInWei = priceInWei;
+	boughtLog.acceptedToken = token.id;
 	boughtLog.save();
 
 	let log = new Web3Log(logId);
