@@ -6,7 +6,7 @@ import {
 	ChangedOwnerCutPerMillion,
 	OrderUpdated
 } from '../generated/entities/Marketplace/Marketplace';
-import { NFT, Order } from '../generated/entities/schema';
+import { NFT, Order, Web3Config } from '../generated/entities/schema';
 import { buildNFT } from '../nft';
 import { NFTProtocol_erc1155, NFTProtocol_erc721, OrderStatus_cancelled, OrderStatus_open, OrderStatus_sold } from '../enums';
 import { buildAccount } from '../account';
@@ -103,4 +103,24 @@ export function handleOrderUpdated(event: OrderUpdated): void {
 
 export function handleChangedPublicationFee(event: ChangedPublicationFee): void { }
 
-export function handleChangedOwnerCutPerMillion(event: ChangedOwnerCutPerMillion): void { }
+function buildConfig(k: string, v: string): Web3Config {
+	let c = Web3Config.load(k);
+	if (c == null) {
+		c = new Web3Config(k);
+		c.value = v;
+		c.save();
+	}
+	return c;
+}
+
+export function handleChangedOwnerCutPerMillion(event: ChangedOwnerCutPerMillion): void { 
+	let allConfig = configs.getAll();
+	let keys = configs.getAllKeys();
+	for (let i = 0; i < keys.length; i++) {
+		let k = keys[i];
+		let value = allConfig.has(k) ? allConfig.get(k) : null;
+		if (value) {
+			buildConfig(k, value);
+		}
+	}
+}

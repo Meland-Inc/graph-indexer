@@ -1,5 +1,9 @@
 {
     "compilerOptions": {
+        "types": [
+            "@graphprotocol/graph-ts",
+            "node"
+        ],
         "alwaysStrict": true,
         "noImplicitAny": true,
         "noImplicitReturns": true,

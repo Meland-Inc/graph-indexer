@@ -181,6 +181,8 @@ type Tier @entity {
 type Future @entity {
 	id: ID!
 	imageURL: String!
+	amount: BigInt!
+	unlockAt: BigInt!
 }
 
 type Viplandfuture @entity {
@@ -194,6 +196,91 @@ type Web3IAccount @entity {
 	imageURL: String!
 	nfts: [NFT!] @derivedFrom(field: "owner")
 	balanceOfMELD: BigInt!
+}
+
+type _ExchangeMELDHistoryMeta_ @entity {
+	id: ID!
+
+	beneficiary: Bytes!
+
+	count: BigInt!
+}
+
+type _DepositDitaminHistoryMeta_ @entity {
+	id: ID!
+
+	beneficiary: Bytes!
+
+	count: BigInt!
+}
+
+type _FutureClaimMeta_ @entity {
+	id: ID!
+
+	beneficiary: Bytes!
+
+	count: BigInt!
+}
+
+type FutureAmount @entity {
+	id: ID!
+
+	beneficiary: Bytes!
+
+	amount: BigInt!
+
+	count: BigInt!
+}
+
+type ExchangeMELDHistory @entity {
+	id: ID!
+	"""
+	兑换时间
+	"""
+	exchangedAt: BigInt!
+
+	amountOfMELD: BigInt!
+
+	beneficiary: Bytes!
+
+	paymentDitamin: BigInt!
+
+	"""
+	支付时间
+	"""
+	paymentAt: BigInt!
+}
+
+type DepositDitaminHistory @entity {
+	id: ID!
+	"""
+	兑换时间
+	"""
+	depositedAt: BigInt!
+
+	amountOfMELD: BigInt!
+
+	beneficiary: Bytes!
+
+	paymentDitamin: BigInt!
+
+	"""
+	支付时间
+	"""
+	paymentAt: BigInt!
+}
+
+type FutureClaim @entity {
+	id: ID!
+
+	"""
+	收益人
+	"""
+	beneficiary: Bytes!
+
+	amount: BigInt!
+
+	claimedAt: BigInt!
 }
 
 type Metadata @entity {
@@ -375,4 +462,10 @@ type NFT @entity {
 	createdAt: BigInt!
 	updatedAt: BigInt!
 	soldAt: BigInt
+}
+
+type Web3Config @entity {
+	id: ID!
+
+	value: String!
 }

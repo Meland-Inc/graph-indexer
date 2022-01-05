@@ -4,10 +4,10 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: Land
-    network: matic
+    network: mumbai
     source:
-      startBlock: 23029175
-      address: "0x7d23e34E676212cEFEB715ee023D15FD2049288b"
+      startBlock: 23090652
+      address: "0x0a1f209C359fb6191e012E4c3165f6c70DEA231f"
       abi: Land
     mapping:
       kind: ethereum/events
@@ -42,10 +42,10 @@ dataSources:
       file: Land/Land.wasm
   - kind: ethereum/contract
     name: Wearable
-    network: matic
+    network: mumbai
     source:
-      startBlock: 23029175
-      address: "0x6A7B9fED27AAAD13A91d56B388d370ac5E485a37"
+      startBlock: 23090652
+      address: "0x3f56B2EaC8ba9174f7b042342953f0Fb485448C3"
       abi: MelandWearable
     mapping:
       kind: ethereum/events
@@ -81,11 +81,99 @@ dataSources:
           handler: handleTransferBatch
       file: Land/Land.wasm
   - kind: ethereum/contract
-    name: LandFuture
-    network: matic
+    name: MELDFuture
+    network: mumbai
     source:
-      startBlock: 23029175
-      address: "0x1A7372C85E1207b8497532aD4147a597172fDF59"
+      startBlock: 23090652
+      address: "0x52d2185D64E24b3c820e799041e3e347b5e09c20"
+      abi: Meland1155MELDFuture
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - NFT
+      abis:
+        - name: Land
+          file: MELDFuture/abis/Meland1155Land.json
+        - name: ERC721
+          file: MELDFuture/abis/ERC721.json
+        - name: ERC1155
+          file: MELDFuture/abis/ERC1155.json
+        - name: MELD
+          file: MELDFuture/abis/MELD.json
+        - name: Marketplace
+          file: MELDFuture/abis/Marketplace.json
+        - name: NFTStore
+          file: MELDFuture/abis/NFTStore.json
+        - name: NFTFactory
+          file: MELDFuture/abis/NFTFactory.json
+        - name: Meland1155MELDFuture
+          file: MELDFuture/abis/Meland1155MELDFuture.json
+        - name: MelandTier
+          file: MELDFuture/abis/MelandTier.json
+        - name: MelandWearable
+          file: MELDFuture/abis/Meland1155Wearable.json
+      eventHandlers:
+        - event: TransferSingle(indexed address,indexed address,indexed address,uint256,uint256)
+          handler: handleTransferSingle
+        - event: TransferBatch(indexed address,indexed address,indexed address,uint256[],uint256[])
+          handler: handleTransferBatch
+        - event: Claim(indexed uint256,indexed address,uint256)
+          handler: handleClaim
+      file: MELDFuture/MELDFuture.wasm
+  - kind: ethereum/contract
+    name: MelandExchange
+    network: mumbai
+    source:
+      startBlock: 23090652
+      address: "0x54E2D21Aac76Be86Fb89bA4bbc8D3AB1F9AB15E2"
+      abi: MelandExchange
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - NFT
+      abis:
+        - name: Land
+          file: MelandExchange/abis/Meland1155Land.json
+        - name: ERC721
+          file: MelandExchange/abis/ERC721.json
+        - name: ERC1155
+          file: MelandExchange/abis/ERC1155.json
+        - name: MELD
+          file: MelandExchange/abis/MELD.json
+        - name: Marketplace
+          file: MelandExchange/abis/Marketplace.json
+        - name: NFTStore
+          file: MelandExchange/abis/NFTStore.json
+        - name: NFTFactory
+          file: MelandExchange/abis/NFTFactory.json
+        - name: Meland1155MELDFuture
+          file: MelandExchange/abis/Meland1155MELDFuture.json
+        - name: MelandTier
+          file: MelandExchange/abis/MelandTier.json
+        - name: MelandWearable
+          file: MelandExchange/abis/Meland1155Wearable.json
+        - name: MelandExchange
+          file: MelandExchange/abis/MelandExchange.json
+      eventHandlers:
+        - event: ExchangePaymentSuccess(uint256)
+          handler: handleExchangePaymentSuccess
+        - event: Exchange(uint256)
+          handler: handleExchange
+        - event: DepositPaymentSuccess(uint256)
+          handler: handleDepositPaymentSuccess
+        - event: Deposit(uint256)
+          handler: handleDeposit
+      file: MelandExchange/MelandExchange.wasm
+  - kind: ethereum/contract
+    name: LandFuture
+    network: mumbai
+    source:
+      startBlock: 23090652
+      address: "0xa489E7E1b4ffA0C34395F587A5Ed961BA32361b1"
       abi: MelandWearable
     mapping:
       kind: ethereum/events
@@ -108,14 +196,12 @@ dataSources:
           file: LandFuture/abis/NFTStore.json
         - name: NFTFactory
           file: LandFuture/abis/NFTFactory.json
-        - name: Meland1155MELDFutures
+        - name: Meland1155MELDFuture
           file: LandFuture/abis/Meland1155MELDFuture.json
         - name: MelandTier
           file: LandFuture/abis/MelandTier.json
         - name: MelandWearable
           file: LandFuture/abis/Meland1155Wearable.json
-        - name: Meland1155LandFuture
-          file: LandFuture/abis/Meland1155LandFuture.json
       eventHandlers:
         - event: TransferSingle(indexed address,indexed address,indexed address,uint256,uint256)
           handler: handleTransferSingle
@@ -124,10 +210,10 @@ dataSources:
       file: Land/Land.wasm
   - kind: ethereum/contract
     name: Tier
-    network: matic
+    network: mumbai
     source:
-      startBlock: 23029175
-      address: "0x061f636b7beA87C65276fb9ec7119F88d9A4B6E7"
+      startBlock: 23090652
+      address: "0xD2F29487C5c5176c7818690Ced262BA2dd48A9ce"
       abi: MelandTier
     mapping:
       kind: ethereum/events
@@ -151,7 +237,7 @@ dataSources:
           file: Tier/abis/NFTStore.json
         - name: NFTFactory
           file: Tier/abis/NFTFactory.json
-        - name: Meland1155MELDFutures
+        - name: Meland1155MELDFuture
           file: Tier/abis/Meland1155MELDFuture.json
         - name: MelandTier
           file: Tier/abis/MelandTier.json
@@ -171,10 +257,10 @@ dataSources:
       file: Tier/Tier.wasm
   - kind: ethereum/contract
     name: NFTFactory
-    network: matic
+    network: mumbai
     source:
-      startBlock: 23029175
-      address: "0xEeD19fd5185f484dd67c1a6552d513876F095054"
+      startBlock: 23090652
+      address: "0x4094116c1b2912Fcb38Dd40891Bb5d759AC82cc4"
       abi: NFTFactory
     mapping:
       kind: ethereum/events
@@ -197,7 +283,7 @@ dataSources:
           file: NFTFactory/abis/NFTStore.json
         - name: NFTFactory
           file: NFTFactory/abis/NFTFactory.json
-        - name: Meland1155MELDFutures
+        - name: Meland1155MELDFuture
           file: NFTFactory/abis/Meland1155MELDFuture.json
       eventHandlers:
         - event: NFTSupportCreate((address,address),address,uint256)
@@ -205,10 +291,10 @@ dataSources:
       file: NFTFactory/NFTFactory.wasm
   - kind: ethereum/contract
     name: NFTStore
-    network: matic
+    network: mumbai
     source:
-      startBlock: 23029175
-      address: "0x7B5f5A3f675d18d5D33b0b3d7e3a35D3F77d4e28"
+      startBlock: 23090652
+      address: "0x9AB9024cf157d4c08ee288F6cDf8431344A46Ca5"
       abi: NFTStore
     mapping:
       kind: ethereum/events
@@ -231,7 +317,7 @@ dataSources:
           file: NFTStore/abis/NFTStore.json
         - name: NFTFactory
           file: NFTStore/abis/NFTFactory.json
-        - name: Meland1155MELDFutures
+        - name: Meland1155MELDFuture
           file: NFTStore/abis/Meland1155MELDFuture.json
         - name: IMelandStoreItems
           file: NFTStore/abis/IMelandStoreItems.json
@@ -253,10 +339,10 @@ dataSources:
       file: NFTStore/NFTStore.wasm
   - kind: ethereum/contract
     name: Marketplace
-    network: matic
+    network: mumbai
     source:
-      startBlock: 23029175
-      address: "0xD5718D48cEfA70A9c452D3c82DcB86b71C5D473C"
+      startBlock: 23090652
+      address: "0xAC4FBBE0D874E44AbbF978E65C65F92471193893"
       abi: Marketplace
     mapping:
       kind: ethereum/events
@@ -279,12 +365,12 @@ dataSources:
           file: Marketplace/abis/NFTStore.json
         - name: NFTFactory
           file: Marketplace/abis/NFTFactory.json
-        - name: Meland1155MELDFutures
-          file: Marketplace/abis/Meland1155MELDFuture.json
         - name: MelandWearable
           file: Marketplace/abis/Meland1155Wearable.json
         - name: Meland1155LandFuture
           file: Marketplace/abis/Meland1155LandFuture.json
+        - name: MelandMELDFuture
+          file: Marketplace/abis/Meland1155MELDFuture.json
       eventHandlers:
         - event: OrderCreated(bytes32,indexed uint256,indexed
             address,(address,address),uint256,uint256)
@@ -303,10 +389,10 @@ dataSources:
       file: Marketplace/Marketplace.wasm
   - kind: ethereum/contract
     name: MELD
-    network: matic
+    network: mumbai
     source:
-      startBlock: 23029175
-      address: "0x48844ddba89799dc40ec31728dac629802d407f3"
+      startBlock: 23090652
+      address: "0x30BcB5D3c0B2aE31fD7457DC4B36c85b520ce673"
       abi: MELD
     mapping:
       kind: ethereum/events
@@ -338,7 +424,7 @@ dataSources:
 templates:
   - name: ERC721
     kind: ethereum/contract
-    network: matic
+    network: mumbai
     source:
       abi: ERC721
     mapping:
@@ -370,7 +456,7 @@ templates:
           handler: handleTransfer
   - name: ERC1155
     kind: ethereum/contract
-    network: matic
+    network: mumbai
     source:
       abi: ERC1155
     mapping:

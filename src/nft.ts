@@ -228,18 +228,17 @@ export function getNFTTokenURI(addressOfNFT: Address, tokenId: BigInt, protocol:
 
 function isMeLandAI(address: Address): boolean {
 	let hex = address.toHex().toLowerCase();
-	let melandAiAddress = [
-		configs.Faucet_address,
-		configs.Land_address,
-		configs.MELD_address,
-		configs.Marketplace_address,
-		configs.Meland1155Placeable_address,
-		configs.Meland1155Wearable_address,
-		configs.MelandTier_address,
-		configs.NFTStore_address,
-		configs.VestPool_address,
-		configs.Meland1155LandFuture_address
+	let melandAiAddress: string[] = [
 	];
+	let allConfig = configs.getAll();
+	let keys = configs.getAllKeys();
+	for (let i = 0; i < keys.length; i++) {
+		let k = keys[i];
+		let value = allConfig.has(k) ? allConfig.get(k) : null;
+		if (value) {
+			melandAiAddress.push(value);
+		}
+	}
 	if (melandAiAddress.includes(hex)) {
 		return true;
 	}
@@ -322,6 +321,10 @@ export function isTier(nftAddress: Address): boolean {
 
 export function isViplandFuture(nftAddress: Address): boolean {
 	return configs.Meland1155LandFuture_address == nftAddress.toHex();
+}
+
+export function isMELDFuture(nftAddress: Address): boolean {
+	return configs.Meland1155MELDFuture_address == nftAddress.toHex();
 }
 
 // 通用处理nft

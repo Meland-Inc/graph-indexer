@@ -1,6 +1,7 @@
 import { ethereum, JSONValue, TypedMap, Entity, Bytes, Address, BigInt, log } from '@graphprotocol/graph-ts';
 import { ERC721 } from './generated/entities/templates/ERC721/ERC721';
 import {
+	Future,
 	Metadata,
 	Placeable as PlaceableSchema,
 	Thirdparty,
@@ -10,11 +11,12 @@ import {
 	Viplandfuture,
 	Wearable
 } from './generated/entities/schema';
-import { getNFTDescByURI, getNFTImageURIByURI, isPlaceable, isTier, isViplandFuture, isWearable } from './nft';
+import { getNFTDescByURI, getNFTImageURIByURI, isMELDFuture, isPlaceable, isTier, isViplandFuture, isWearable } from './nft';
 import { buildRcCoordinates, isTicketLand, isVipLand } from './land';
-import { ItemType_placeable, ItemType_thirdparty, ItemType_ticketland, ItemType_tier, ItemType_undefined, ItemType_vipland, ItemType_viplandfutures, ItemType_wearable } from './enums';
+import { ItemType_futures, ItemType_placeable, ItemType_thirdparty, ItemType_ticketland, ItemType_tier, ItemType_undefined, ItemType_vipland, ItemType_viplandfutures, ItemType_wearable } from './enums';
 import { format } from './helper';
 import { MelandWearable } from './generated/entities/NFTStore/MelandWearable';
+import { Meland1155MELDFuture } from './generated/entities/MELDFuture/Meland1155MELDFuture';
 
 // TODO
 export function buildPlaceable(nftAddress: Address): PlaceableSchema {
@@ -101,6 +103,25 @@ export function buildViplandfuture(nftAddress: Address, tokenId: BigInt, uri: st
 	return w;
 }
 
+export function buildMELDFuture(nftAddress: Address, tokenId: BigInt, uri: string): Future {
+	let wId = format("{}-{}-{}", [ nftAddress.toHex(), tokenId.toHex(), uri]);
+	let w = Future.load(wId);
+	let faEntity = Meland1155MELDFuture.bind(nftAddress);
+	if (w === null) {
+		w = new Future(wId);
+		w.imageURL = getNFTImageURIByURI(uri);
+		let tryFutureInfo = faEntity.try_futureById(tokenId);
+		w.amount = BigInt.fromI32(0);
+		w.unlockAt = BigInt.fromI32(0);
+		if (!tryFutureInfo.reverted) {
+			w.amount = tryFutureInfo.value.value2;
+			w.unlockAt = tryFutureInfo.value.value1;
+		}
+		w.save();
+	}
+	return w;
+}
+
 export function buildMetadata(
 	nftAddress: Address,
 	tokenId: BigInt,
@@ -131,6 +152,9 @@ export function buildMetadata(
 		} else if (isViplandFuture(nftAddress)) {
 			metadata.itemType = ItemType_viplandfutures;
 			metadata.viplandfutures = buildViplandfuture(nftAddress, tokenId, uri).id;
+		} else if (isMELDFuture(nftAddress)) {
+			metadata.itemType = ItemType_futures;
+			metadata.future = buildMELDFuture(nftAddress, tokenId, uri).id;
 		} else {
 			metadata.itemType = ItemType_thirdparty;
 			metadata.thirdparty = buildThirdParty(nftAddress, tokenId, uri).id;
