@@ -1,5 +1,5 @@
 import { Address, BigInt } from '@graphprotocol/graph-ts';
-import { Deposit, DepositPaymentSuccess, Exchange, ExchangePaymentSuccess, MelandExchange } from '../generated/entities/MelandExchange/MelandExchange';
+import { DepositPaymentFail, ExchangePaymentFail, Deposit, DepositPaymentSuccess, Exchange, ExchangePaymentSuccess, MelandExchange } from '../generated/entities/MelandExchange/MelandExchange';
 import { DepositDitaminHistory, ExchangeMELDHistory, _DepositDitaminHistoryMeta_, _ExchangeMELDHistoryMeta_ } from '../generated/entities/schema';
 
 function buildExchangeMeta(beneficiary: Address): _ExchangeMELDHistoryMeta_ {
@@ -30,10 +30,10 @@ export function handleExchangePaymentSuccess(event: ExchangePaymentSuccess): voi
     let id = event.params.exchangeId;
     let me = MelandExchange.bind(event.address);
     let exchangeInfo = me.getExchangeMELDById(id);
-
     let exh = ExchangeMELDHistory.load(id.toString())!;
     exh.paymentAt = exchangeInfo.value4;
     exh.paymentDitamin = exchangeInfo.value3;
+    exh.completeedTxHash = event.transaction.hash;
     exh.save();
 }
 
@@ -41,17 +41,16 @@ export function handleExchange(event: Exchange): void {
     let id = event.params.exchangeId;
     let me = MelandExchange.bind(event.address);
     let exchangeInfo = me.getExchangeMELDById(id);
-
     let meta = buildExchangeMeta(exchangeInfo.value2);
     meta.count = meta.count.plus(BigInt.fromI32(1));
     meta.save();
-
     let exh = new ExchangeMELDHistory(id.toString());
     exh.amountOfMELD = exchangeInfo.value1;
     exh.beneficiary = exchangeInfo.value2;
     exh.exchangedAt = exchangeInfo.value0;
     exh.paymentDitamin = exchangeInfo.value3;
     exh.paymentAt = exchangeInfo.value4;
+    exh.confirmedTxHash = event.transaction.hash;
     exh.save();
 }
 
@@ -59,17 +58,10 @@ export function handleDepositPaymentSuccess(event: DepositPaymentSuccess): void 
     let id = event.params.depositId;
     let me = MelandExchange.bind(event.address);
     let dInfo = me.getDepositDitaminById(id);
-    
-    let meta = buildDepositMeta(dInfo.value2);
-    meta.count = meta.count.plus(BigInt.fromI32(1));
-    meta.save();
-    
-    let dh = new DepositDitaminHistory(id.toString());
-    dh.amountOfMELD = dInfo.value1;
-    dh.depositedAt = dInfo.value0;
-    dh.beneficiary = dInfo.value2;
+    let dh = DepositDitaminHistory.load(id.toString())!;
     dh.paymentAt = dInfo.value4;
     dh.paymentDitamin = dInfo.value3;
+    dh.completeedTxHash = event.transaction.hash;
     dh.save();
 }
 
@@ -77,16 +69,31 @@ export function handleDeposit(event: Deposit): void {
     let id = event.params.depositId;
     let me = MelandExchange.bind(event.address);
     let dInfo = me.getDepositDitaminById(id);
-    
     let meta = buildDepositMeta(dInfo.value2);
     meta.count = meta.count.plus(BigInt.fromI32(1));
     meta.save();
-
     let dh = new DepositDitaminHistory(id.toString());
     dh.amountOfMELD = dInfo.value1;
     dh.depositedAt = dInfo.value0;
     dh.beneficiary = dInfo.value2;
     dh.paymentAt = dInfo.value4;
     dh.paymentDitamin = dInfo.value3;
+    dh.confirmedTxHash = event.transaction.hash;
     dh.save();
+}
+
+export function handleDepositPaymentFail(event: DepositPaymentFail): void {
+    let id = event.params.depositId;
+    let dh = DepositDitaminHistory.load(id.toString())!;
+    dh.failedAt = event.block.timestamp;
+    dh.failedMessage = event.params.message;
+    dh.save();
+}
+
+export function handleExchangePaymentFail(event: ExchangePaymentFail): void {
+    let id = event.params.exchangeId;
+    let exh = ExchangeMELDHistory.load(id.toString())!;
+    exh.failedAt = event.block.timestamp;
+    exh.failedMessage = event.params.message;
+    exh.save();
 }

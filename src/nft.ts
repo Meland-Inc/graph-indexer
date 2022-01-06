@@ -7,7 +7,7 @@ import { buildAccount } from './account';
 import { format } from './helper';
 import { Land } from './generated/entities/Land/Land';
 import { MelandWearable } from './generated/entities/Wearable/MelandWearable';
-import { ItemType_placeable, ItemType_thirdparty, ItemType_tier, ItemType_viplandfutures, ItemType_wearable, NFTProtocol_erc721, OrderStatus_cancelled, OrderStatus_open, VUnknow } from './enums';
+import { ItemType_futures, ItemType_placeable, ItemType_thirdparty, ItemType_tier, ItemType_viplandfutures, ItemType_wearable, NFTProtocol_erc721, OrderStatus_cancelled, OrderStatus_open, VUnknow } from './enums';
 import { transferLog } from './log';
 import * as configs from './config';
 
@@ -16,6 +16,9 @@ export function buildNFTId(addressOfNFT: Address, tokenId: BigInt): string {
 }
 
 export function fetchMetadata(uri: string): TypedMap<string, JSONValue> {
+	if (uri == "unknow") {
+		return json.fromBytes(Bytes.fromUTF8("{}")).toObject();
+	}
 
 	if (uri.includes("ticketland")) {
 		uri = "https://token-metadata-release.melandworld.com/land/ticketland/";
@@ -181,6 +184,8 @@ export function buildNFTSymbolWithURI(addressOfNFT: Address, uri: string): strin
 		return format("MELD-{}", [ItemType_placeable]);
 	} else if (addressOfNFT.toHex() == configs.Meland1155LandFuture_address) {
 		return format("MELD-{}", [ItemType_viplandfutures]);
+	} else if (addressOfNFT.toHex() == configs.Meland1155MELDFuture_address) {
+		return format("MELD-{}", [ItemType_futures]);
 	}
 
 	return ItemType_thirdparty;
@@ -201,6 +206,8 @@ export function buildNFTSymbol(addressOfNFT: Address, tokenId: BigInt): string {
 		return format("MELD-{}", [ItemType_placeable]);
 	} else if (addressOfNFT.toHex() == configs.Meland1155LandFuture_address) {
 		return format("MELD-{}", [ItemType_viplandfutures]);
+	} else if (addressOfNFT.toHex() == configs.Meland1155MELDFuture_address) {
+		return format("MELD-{}", [ItemType_futures]);
 	}
 
 	return ItemType_thirdparty;

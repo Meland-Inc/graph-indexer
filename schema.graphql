@@ -245,10 +245,20 @@ type ExchangeMELDHistory @entity {
 
 	paymentDitamin: BigInt!
 
+	confirmedTxHash: Bytes!
+
+	completeedTxHash: Bytes
+
 	"""
 	支付时间
 	"""
 	paymentAt: BigInt!
+
+	"""
+	失败时间
+	"""
+	failedAt: BigInt!
+	failedMessage: String!
 }
 
 type DepositDitaminHistory @entity {
@@ -264,10 +274,20 @@ type DepositDitaminHistory @entity {
 
 	paymentDitamin: BigInt!
 
+	confirmedTxHash: Bytes!
+
+	completeedTxHash: Bytes
+
 	"""
 	支付时间
 	"""
 	paymentAt: BigInt!
+
+	"""
+	失败时间
+	"""
+	failedAt: BigInt!
+	failedMessage: String!
 }
 
 type FutureClaim @entity {
@@ -279,6 +299,8 @@ type FutureClaim @entity {
 	beneficiary: Bytes!
 
 	amount: BigInt!
+
+	txHash: Bytes!
 
 	claimedAt: BigInt!
 }

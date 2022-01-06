@@ -4,10 +4,10 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: Land
-    network: mumbai
+    network: matic
     source:
-      startBlock: 23090652
-      address: "0x0a1f209C359fb6191e012E4c3165f6c70DEA231f"
+      startBlock: 23029177
+      address: "0x7d23e34E676212cEFEB715ee023D15FD2049288b"
       abi: Land
     mapping:
       kind: ethereum/events
@@ -42,10 +42,10 @@ dataSources:
       file: Land/Land.wasm
   - kind: ethereum/contract
     name: Wearable
-    network: mumbai
+    network: matic
     source:
-      startBlock: 23090652
-      address: "0x3f56B2EaC8ba9174f7b042342953f0Fb485448C3"
+      startBlock: 23029177
+      address: "0x6A7B9fED27AAAD13A91d56B388d370ac5E485a37"
       abi: MelandWearable
     mapping:
       kind: ethereum/events
@@ -82,10 +82,10 @@ dataSources:
       file: Land/Land.wasm
   - kind: ethereum/contract
     name: MELDFuture
-    network: mumbai
+    network: matic
     source:
-      startBlock: 23090652
-      address: "0x52d2185D64E24b3c820e799041e3e347b5e09c20"
+      startBlock: 23029177
+      address: "0x64c87BCae4AA5dA669d6CBCBD710dC3d020e6A73"
       abi: Meland1155MELDFuture
     mapping:
       kind: ethereum/events
@@ -124,10 +124,10 @@ dataSources:
       file: MELDFuture/MELDFuture.wasm
   - kind: ethereum/contract
     name: MelandExchange
-    network: mumbai
+    network: matic
     source:
-      startBlock: 23090652
-      address: "0x54E2D21Aac76Be86Fb89bA4bbc8D3AB1F9AB15E2"
+      startBlock: 23029177
+      address: "0xd3FD1F88DBf232461569DECc35a0cB57b0a6B427"
       abi: MelandExchange
     mapping:
       kind: ethereum/events
@@ -167,13 +167,17 @@ dataSources:
           handler: handleDepositPaymentSuccess
         - event: Deposit(uint256)
           handler: handleDeposit
+        - event: ExchangePaymentFail(indexed uint256,string)
+          handler: handleExchangePaymentFail
+        - event: DepositPaymentFail(indexed uint256,string)
+          handler: handleDepositPaymentFail
       file: MelandExchange/MelandExchange.wasm
   - kind: ethereum/contract
     name: LandFuture
-    network: mumbai
+    network: matic
     source:
-      startBlock: 23090652
-      address: "0xa489E7E1b4ffA0C34395F587A5Ed961BA32361b1"
+      startBlock: 23029177
+      address: "0x1A7372C85E1207b8497532aD4147a597172fDF59"
       abi: MelandWearable
     mapping:
       kind: ethereum/events
@@ -210,10 +214,10 @@ dataSources:
       file: Land/Land.wasm
   - kind: ethereum/contract
     name: Tier
-    network: mumbai
+    network: matic
     source:
-      startBlock: 23090652
-      address: "0xD2F29487C5c5176c7818690Ced262BA2dd48A9ce"
+      startBlock: 23029177
+      address: "0x061f636b7beA87C65276fb9ec7119F88d9A4B6E7"
       abi: MelandTier
     mapping:
       kind: ethereum/events
@@ -257,10 +261,10 @@ dataSources:
       file: Tier/Tier.wasm
   - kind: ethereum/contract
     name: NFTFactory
-    network: mumbai
+    network: matic
     source:
-      startBlock: 23090652
-      address: "0x4094116c1b2912Fcb38Dd40891Bb5d759AC82cc4"
+      startBlock: 23029177
+      address: "0xEeD19fd5185f484dd67c1a6552d513876F095054"
       abi: NFTFactory
     mapping:
       kind: ethereum/events
@@ -291,10 +295,10 @@ dataSources:
       file: NFTFactory/NFTFactory.wasm
   - kind: ethereum/contract
     name: NFTStore
-    network: mumbai
+    network: matic
     source:
-      startBlock: 23090652
-      address: "0x9AB9024cf157d4c08ee288F6cDf8431344A46Ca5"
+      startBlock: 23029177
+      address: "0x7B5f5A3f675d18d5D33b0b3d7e3a35D3F77d4e28"
       abi: NFTStore
     mapping:
       kind: ethereum/events
@@ -339,10 +343,10 @@ dataSources:
       file: NFTStore/NFTStore.wasm
   - kind: ethereum/contract
     name: Marketplace
-    network: mumbai
+    network: matic
     source:
-      startBlock: 23090652
-      address: "0xAC4FBBE0D874E44AbbF978E65C65F92471193893"
+      startBlock: 23029177
+      address: "0xD5718D48cEfA70A9c452D3c82DcB86b71C5D473C"
       abi: Marketplace
     mapping:
       kind: ethereum/events
@@ -389,10 +393,10 @@ dataSources:
       file: Marketplace/Marketplace.wasm
   - kind: ethereum/contract
     name: MELD
-    network: mumbai
+    network: matic
     source:
-      startBlock: 23090652
-      address: "0x30BcB5D3c0B2aE31fD7457DC4B36c85b520ce673"
+      startBlock: 23029177
+      address: "0x48844ddba89799dc40ec31728dac629802d407f3"
       abi: MELD
     mapping:
       kind: ethereum/events
@@ -424,7 +428,7 @@ dataSources:
 templates:
   - name: ERC721
     kind: ethereum/contract
-    network: mumbai
+    network: matic
     source:
       abi: ERC721
     mapping:
@@ -456,7 +460,7 @@ templates:
           handler: handleTransfer
   - name: ERC1155
     kind: ethereum/contract
-    network: mumbai
+    network: matic
     source:
       abi: ERC1155
     mapping:

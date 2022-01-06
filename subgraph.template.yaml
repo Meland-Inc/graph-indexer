@@ -167,6 +167,10 @@ dataSources:
           handler: handleDepositPaymentSuccess
         - event: Deposit(uint256)
           handler: handleDeposit
+        - event: ExchangePaymentFail(indexed uint256,string)
+          handler: handleExchangePaymentFail
+        - event: DepositPaymentFail(indexed uint256,string)
+          handler: handleDepositPaymentFail
       file: ./src/maps/Exchange.ts
   - kind: ethereum/contract
     name: LandFuture

@@ -16,7 +16,9 @@ export function handleTransferSingle(event: TransferSingle): void {
     nft.owner = buildAccount(event.params.to).id;
     nft.save();
 
-    handFromTransfer(event.address, event.params.to, event.params.id);
+    if (event.params.from != Address.zero()) {
+        handFromTransfer(event.address, event.params.to, event.params.id);
+    }
     handToTransfer(event.address, event.params.to, event.params.id);
 
     gensHandleTransfer(
@@ -79,6 +81,7 @@ export function handleClaim(event: Claim): void {
     fc.amount = event.params.amount;
     fc.claimedAt = event.block.timestamp;
     fc.beneficiary = event.params.beneficiary;
+    fc.txHash = event.transaction.hash;
     fc.save();
 }
 
@@ -94,7 +97,9 @@ export function handleTransferBatch(event: TransferBatch): void {
         nft.owner = buildAccount(event.params.to).id;
         nft.save();
 
-        handFromTransfer(event.address, event.params.to, id);
+        if (event.params.from != Address.zero()) {
+            handFromTransfer(event.address, event.params.from, id);
+        }
         handToTransfer(event.address, event.params.to, id);
 
         gensHandleTransfer(
