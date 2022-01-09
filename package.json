@@ -23,5 +23,8 @@
   },
   "devDependencies": {
     "assemblyscript": "0.19.10"
+  },
+  "resolutions": {
+    "@graphprotocol/graph-ts": "https://github.com/Meland-Inc/graph-ts.git#master"
   }
 }
