@@ -12,7 +12,7 @@ export const Meland1155LandFuture_address = "0x7809E4877d9370BBB5BBA1Cfd8e3dB522
 export const Meland1155MELDFuture_address = "0xD473D32EC8c69fE07DBe154c000f578711CD5d96".toLowerCase();
 export const MelandExchange_address = "0x5d21B61C7FEa384189B098633b75152C0dC8D9b8".toLowerCase();
 export const MelandTier_address = "0xC643935681e2B3f1B8d911B6D5fe549C98B6458C".toLowerCase();
-export const start_block = "23574401".toLowerCase();
+export const start_block = "23574402".toLowerCase();
 export function getAll(): Map<string, string>  {
     let map = new Map<string, string>();
     map.set("network", network);

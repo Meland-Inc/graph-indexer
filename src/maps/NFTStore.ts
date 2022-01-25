@@ -1,14 +1,17 @@
-import { NFTBuyed, NFTCreated, NFTDelete, NFTItemUpdate, NFTStore } from '../generated/entities/NFTStore/NFTStore';
-import { BigInt, Bytes, log, http, store, Address } from '@graphprotocol/graph-ts';
-import { ERC20, NFT, NFTStoreItem, NFTStoreItemAll, SupplyQuantity } from '../generated/entities/schema';
+import { NFTBuyed, NFTCreated, NFTDelete, NFTItemUpdate } from '../generated/entities/NFTStore/NFTStore';
+import { BigInt, Bytes, log, Address } from '@graphprotocol/graph-ts';
+import { NFT, NFTStoreItem, NFTStoreItemAll, SupplyQuantity } from '../generated/entities/schema';
 import { buildMetadata } from '../metadata';
-import { buildNFT, buildNFTId, buildNFTSymbolWithURI, buildSupplyQuantity, getMintMaxByURI, getNFTNameByURI, getNFTRarityByURI } from '../nft';
-import { NFTStoreStatus_open, NFTStoreStatus_cancelled, NFTProtocol_erc1155 } from '../enums';
+import { buildNFTId, buildSupplyQuantity } from '../nft';
+import { NFTStoreStatus_open, NFTStoreStatus_cancelled, NFTProtocol_erc1155, NFTProtocol } from '../enums';
 import { IMelandStoreItems } from '../generated/entities/NFTStore/IMelandStoreItems';
 import { buildAccount } from '../account';
 import { format } from '../helper';
 import { buildAcceptedToken } from '../token';
 import { boughtLog } from '../log';
+import { getMintMaxByURI, buildNFTSymbolByURI, getNFTNameByURI, getNFTRarityByURI } from '../tokenuri';
+
+let tokenId = BigInt.fromI32(0);
 
 export function handleNFTBuyed(event: NFTBuyed): void {
 	let nftAddress = event.params.nftAddress;
@@ -53,6 +56,8 @@ function buildStoreItem(
 	txHash: Bytes,
 	timestamp: BigInt
 ): void {
+	let nftProtocol: NFTProtocol = NFTProtocol_erc1155;
+
 	let item = IMelandStoreItems.bind(nftAddress);
 
 	let try_items = item.try_melandStoreItems();
@@ -89,7 +94,7 @@ function buildStoreItem(
 		let storeItemOfNFT = NFTStoreItem.load(stroeItemId);
 		if (storeItemOfNFT == null) {
 			storeItemOfNFT = new NFTStoreItem(stroeItemId);
-			storeItemOfNFT.currentStockQuantity = getMintMaxByURI(tokenURI);
+			storeItemOfNFT.currentStockQuantity = getMintMaxByURI(tokenURI, nftProtocol, nftAddress, tokenId);
 		}
 
 		if (idsResult.value0) {
@@ -115,12 +120,12 @@ function buildStoreItem(
 		}
 
 		storeItemOfNFT.acceptedToken = buildAcceptedToken(erc20Address).id;
-		storeItemOfNFT.symbol = buildNFTSymbolWithURI(nftAddress, tokenURI);
+		storeItemOfNFT.symbol = buildNFTSymbolByURI(tokenURI, nftProtocol, nftAddress, tokenId);
 		storeItemOfNFT.buyCallbackState = symbol;
-		storeItemOfNFT.name = getNFTNameByURI(tokenURI);
-		storeItemOfNFT.rarity = getNFTRarityByURI(tokenURI);
+		storeItemOfNFT.name = getNFTNameByURI(tokenURI, nftProtocol, nftAddress, tokenId);
+		storeItemOfNFT.rarity = getNFTRarityByURI(tokenURI, nftProtocol, nftAddress, tokenId);
 		storeItemOfNFT.tokenURI = tokenURI;
-		storeItemOfNFT.supplyQuantity = buildSupplyQuantity(nftAddress, tokenURI, storeItemOfNFT.currentStockQuantity).id;
+		storeItemOfNFT.supplyQuantity = buildSupplyQuantity(tokenURI, nftProtocol, nftAddress, tokenId, storeItemOfNFT.currentStockQuantity).id;
 		storeItemOfNFT.createdAt = timestamp;
 		storeItemOfNFT.blockNumber = blockNumber;
 		storeItemOfNFT.limit = limit;

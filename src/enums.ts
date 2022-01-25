@@ -1,7 +1,7 @@
 // wsam不支持 string enum
 // 所以改成const代替
 
-export const VUnknow = 'unknow';
+export const VUnknow = '';
 
 export const OrderStatus_open = 'open';
 export const OrderStatus_sold = 'sold';
@@ -29,3 +29,4 @@ export const LogAction_bought = 'bought';
 
 export const NFTProtocol_erc721 = 'erc721';
 export const NFTProtocol_erc1155 = 'erc1155';
+export type NFTProtocol = string;

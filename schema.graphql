@@ -156,10 +156,11 @@ type Tikcetland @entity {
 # 放置类道具
 type Placeable @entity {
 	id: ID!
-
 	rarity: String!
 	imageURL: String!
 	cid: String!
+	skillId: String!
+	skillLevel: String!
 }
 
 type Thirdparty @entity {
@@ -321,7 +322,7 @@ type Metadata @entity {
 	thirdparty: Thirdparty
 	wearable: Wearable
 	tier: Tier
-	future: Future
+	futures: Future
 	viplandfutures: Viplandfuture
 }
 
@@ -457,6 +458,11 @@ Return parameters at the time of purchase
 如果为0则表示不限购
 """
 	limit: BigInt!
+}
+
+type NFTUnknowMetadata @entity {
+	id: ID!
+	nfts: [NFT!]!
 }
 
 type NFT @entity {

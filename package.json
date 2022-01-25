@@ -8,9 +8,8 @@
     "prepare:local": "node ./genconfig.js config/local.json && mustache config/local.json subgraph.template.yaml > subgraph.yaml && npm run codegen",
     "prepare:matic": "node ./genconfig.js config/matic.json && mustache config/matic.json subgraph.template.yaml > subgraph.yaml && npm run codegen",
     "deploy": "graph deploy --node https://api.thegraph.com/deploy/ HongjiangHuang/Meland",
-    "create-local": "graph create --node http://localhost:8020/ HongjiangHuang/Meland",
-    "remove-local": "graph remove --node http://localhost:8020/ HongjiangHuang/Meland",
-    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 HongjiangHuang/Meland",
+    "create:local": "graph create --node http://localhost:8020/ HongjiangHuang/Meland",
+    "deploy:local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 HongjiangHuang/Meland",
     "deploy:matic": "graph deploy --ipfs https://api-ipfs.melandworld.com --node https://jsonrpc-graph-node-matic.melandworld.com HongjiangHuang/Meland",
     "deploy:mumbai": "graph deploy --ipfs https://api-ipfs.melandworld.com --node https://jsonrpc-graph-node-mumbai.melandworld.com HongjiangHuang/Meland",
     "create:mumbai": "graph create --node https://jsonrpc-graph-node-mumbai.melandworld.com HongjiangHuang/Meland",
@@ -19,6 +18,7 @@
   "dependencies": {
     "@graphprotocol/graph-cli": "^0.24.0",
     "@graphprotocol/graph-ts": "^0.24.0",
+    "as-crypto": "^0.0.4",
     "mustache": "^4.0.1"
   },
   "devDependencies": {
