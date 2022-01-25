@@ -34,6 +34,8 @@ dataSources:
           file: ./abis/Meland1155MELDFuture.json
         - name: MelandTier
           file: ./abis/MelandTier.json
+        - name: Meland1155Placeable
+          file: ./abis/Meland1155Placeable.json
       eventHandlers:
         - event: TransferSingle(indexed address,indexed address,indexed address,uint256,uint256)
           handler: handleTransferSingle
@@ -75,6 +77,8 @@ dataSources:
           file: ./abis/MelandTier.json
         - name: MelandWearable
           file: ./abis/Meland1155Wearable.json
+        - name: Meland1155Placeable
+          file: ./abis/Meland1155Placeable.json
       eventHandlers:
         - event: TransferSingle(indexed address,indexed address,indexed address,uint256,uint256)
           handler: handleTransferSingle
@@ -115,6 +119,8 @@ dataSources:
           file: ./abis/MelandTier.json
         - name: MelandWearable
           file: ./abis/Meland1155Wearable.json
+        - name: Meland1155Placeable
+          file: ./abis/Meland1155Placeable.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer
@@ -152,12 +158,56 @@ dataSources:
           file: ./abis/MelandTier.json
         - name: MelandWearable
           file: ./abis/Meland1155Wearable.json
+        - name: Meland1155Placeable
+          file: ./abis/Meland1155Placeable.json
       eventHandlers:
         - event: TransferSingle(indexed address,indexed address,indexed address,uint256,uint256)
           handler: handleTransferSingle
         - event: TransferBatch(indexed address,indexed address,indexed address,uint256[],uint256[])
           handler: handleTransferBatch
       file: ./src/maps/Wearable.ts
+  - name: Placeable
+    kind: ethereum/contract
+    network: {{network}}
+    source:
+      startBlock: {{start_block}}
+      address: '{{Meland1155Placeable_address}}'
+      abi: Meland1155Placeable
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - NFT
+      abis:
+        - name: Land
+          file: ./abis/Meland1155Land.json
+        - name: ERC721
+          file: ./abis/ERC721.json
+        - name: ERC1155
+          file: ./abis/ERC1155.json
+        - name: MELD
+          file: ./abis/MELD.json
+        - name: Marketplace
+          file: ./abis/Marketplace.json
+        - name: NFTStore
+          file: ./abis/NFTStore.json
+        - name: NFTFactory
+          file: ./abis/NFTFactory.json
+        - name: Meland1155MELDFutures
+          file: ./abis/Meland1155MELDFuture.json
+        - name: MelandTier
+          file: ./abis/MelandTier.json
+        - name: MelandWearable
+          file: ./abis/Meland1155Wearable.json
+        - name: Meland1155Placeable
+          file: ./abis/Meland1155Placeable.json
+      eventHandlers:
+        - event: TransferSingle(indexed address,indexed address,indexed address,uint256,uint256)
+          handler: handleTransferSingle
+        - event: TransferBatch(indexed address,indexed address,indexed address,uint256[],uint256[])
+          handler: handleTransferBatch
+      file: ./src/maps/Placeable.ts
   - name: MELDFuture
     kind: ethereum/contract
     network: {{network}}
@@ -192,6 +242,8 @@ dataSources:
           file: ./abis/MelandTier.json
         - name: MelandWearable
           file: ./abis/Meland1155Wearable.json
+        - name: Meland1155Placeable
+          file: ./abis/Meland1155Placeable.json
       eventHandlers:
         - event: TransferSingle(indexed address,indexed address,indexed address,uint256,uint256)
           handler: handleTransferSingle
@@ -236,6 +288,8 @@ dataSources:
           file: ./abis/Meland1155Wearable.json
         - name: MelandExchange
           file: ./abis/MelandExchange.json
+        - name: Meland1155Placeable
+          file: ./abis/Meland1155Placeable.json
       eventHandlers:
         - event: ExchangePaymentSuccess(uint256)
           handler: handleExchangePaymentSuccess
@@ -284,6 +338,8 @@ dataSources:
           file: ./abis/MelandTier.json
         - name: MelandWearable
           file: ./abis/Meland1155Wearable.json
+        - name: Meland1155Placeable
+          file: ./abis/Meland1155Placeable.json
       eventHandlers:
         - event: TransferSingle(indexed address,indexed address,indexed address,uint256,uint256)
           handler: handleTransferSingle
@@ -323,6 +379,8 @@ dataSources:
           file: ./abis/Meland1155MELDFuture.json
         - name: MelandTier
           file: ./abis/MelandTier.json
+        - name: Meland1155Placeable
+          file: ./abis/Meland1155Placeable.json
       eventHandlers:
         - event: TransferSingle(indexed address,indexed address,indexed address,uint256,uint256)
           handler: handleTransferSingle
@@ -367,6 +425,8 @@ dataSources:
           file: ./abis/NFTFactory.json
         - name: Meland1155MELDFuture
           file: ./abis/Meland1155MELDFuture.json
+        - name: Meland1155Placeable
+          file: ./abis/Meland1155Placeable.json
       eventHandlers:
         - event: NFTSupportCreate((address,address),address,uint256)
           handler: handleNFTSupportCreate
@@ -409,6 +469,8 @@ dataSources:
           file: ./abis/Meland1155Wearable.json
         - name: Meland1155LandFuture
           file: ./abis/Meland1155LandFuture.json
+        - name: Meland1155Placeable
+          file: ./abis/Meland1155Placeable.json
       eventHandlers:
         - event: NFTBuyed(indexed address,indexed address,string,uint256,uint256)
           handler: handleNFTBuyed
@@ -453,6 +515,8 @@ dataSources:
           file: ./abis/Meland1155LandFuture.json
         - name: MelandMELDFuture
           file: ./abis/Meland1155MELDFuture.json
+        - name: Meland1155Placeable
+          file: ./abis/Meland1155Placeable.json
       eventHandlers:
         - event: OrderCreated(bytes32,indexed uint256,indexed address,(address,address),uint256,uint256)
           handler: handleOrderCreated
@@ -497,6 +561,8 @@ dataSources:
           file: ./abis/NFTFactory.json
         - name: Meland1155MELDFutures
           file: ./abis/Meland1155MELDFuture.json
+        - name: Meland1155Placeable
+          file: ./abis/Meland1155Placeable.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer

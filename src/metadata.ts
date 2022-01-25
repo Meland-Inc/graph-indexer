@@ -21,40 +21,46 @@ import { Meland1155MELDFuture } from './generated/entities/MELDFuture/Meland1155
 import * as md5 from '../node_modules/as-crypto/lib/md5';
 import * as base64 from '../node_modules/as-crypto/lib/base64';
 import { getNFTImageByURI, getNFTDescByURI } from './tokenuri';
+import { Meland1155Placeable } from './generated/entities/Placeable/Meland1155Placeable';
+// import { } from './generated/entities'
 
 // TODO
-export function buildPlaceable(nftAddress: Address): PlaceableSchema {
-	let rarity = '';
-	let cid = '0';
-	let placeable = PlaceableSchema.load(cid);
+export function buildPlaceable(nftAddress: Address, tokenId: BigInt, uri: string): PlaceableSchema {
+	let pId = md5.hex32(Bytes.fromUTF8(format("{}-{}-{}", [nftAddress.toHex(), tokenId.toHex(), uri])));
+	let pi = Meland1155Placeable.bind(nftAddress);
+	let cid = pi.getCidByTokenId(tokenId);
+	let placeable = PlaceableSchema.load(pId);
 	if (placeable === null) {
-		placeable = new PlaceableSchema(cid);
-		placeable.rarity = rarity;
-		placeable.imageURL = format('https://token-image-release.melandworld.com/{}/{}', [ItemType_placeable, cid]);
+		placeable = new PlaceableSchema(pId);
+		placeable.cid = cid.toString();
+		placeable.placeableLands = "VIP";
+		placeable.coreSkillId = "";
+		placeable.skillLevel = "";
+		placeable.imageURL = getNFTImageByURI(uri, NFTProtocol_erc1155, nftAddress, tokenId);
 		placeable.save();
 	}
 	return placeable;
 }
 
-export function buildTicketLand(nftAddress: Address, tokenId: BigInt): TikcetLandSchema {
+export function buildTicketLand(nftAddress: Address, tokenId: BigInt, uri: string): TikcetLandSchema {
 	let ticketLandId = tokenId.toString();
 	let ticketLand = TikcetLandSchema.load(ticketLandId);
 	if (ticketLand === null) {
 		ticketLand = new TikcetLandSchema(ticketLandId);
 		ticketLand.rcCoordinates = buildRcCoordinates(tokenId).id;
-		ticketLand.imageURL = format('https://token-image-release.melandworld.com/{}/{}', [ItemType_ticketland, ticketLandId]);
+		ticketLand.imageURL = getNFTImageByURI(uri, NFTProtocol_erc1155, nftAddress, tokenId);
 		ticketLand.save();
 	}
 	return ticketLand;
 }
 
-export function buildVipLand(nftAddress: Address, tokenId: BigInt): ViplandSchema {
+export function buildVipLand(nftAddress: Address, tokenId: BigInt, uri: string): ViplandSchema {
 	let ticketLandId = tokenId.toString();
 	let ticketLand = ViplandSchema.load(ticketLandId);
 	if (ticketLand === null) {
 		ticketLand = new ViplandSchema(ticketLandId);
 		ticketLand.rcCoordinates = buildRcCoordinates(tokenId).id;
-		ticketLand.imageURL = format('https://token-image-release.melandworld.com/{}/{}', [ItemType_vipland, ticketLandId]);
+		ticketLand.imageURL = getNFTImageByURI(uri, NFTProtocol_erc1155, nftAddress, tokenId);
 		ticketLand.save();
 	}
 	return ticketLand;
@@ -140,13 +146,13 @@ export function buildMetadata(
 		metadata.description = getNFTDescByURI(uri, nftProtocol, nftAddress, tokenId);
 		if (isPlaceable(nftAddress)) {
 			metadata.itemType = ItemType_placeable;
-			metadata.placeable = buildPlaceable(nftAddress).id;
+			metadata.placeable = buildPlaceable(nftAddress, tokenId, uri).id;
 		} else if (isTicketLand(nftAddress, tokenId, uri)) {
 			metadata.itemType = ItemType_ticketland;
-			metadata.ticketland = buildTicketLand(nftAddress, tokenId).id;
+			metadata.ticketland = buildTicketLand(nftAddress, tokenId, uri).id;
 		} else if (isVipLand(nftAddress, tokenId, uri)) {
 			metadata.itemType = ItemType_vipland;
-			metadata.vipland = buildVipLand(nftAddress, tokenId).id;
+			metadata.vipland = buildVipLand(nftAddress, tokenId, uri).id;
 		} else if (isWearable(nftAddress)) {
 			metadata.itemType = ItemType_wearable;
 			metadata.wearable = buildWearable(nftAddress, tokenId, uri).id;

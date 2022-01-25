@@ -156,11 +156,11 @@ type Tikcetland @entity {
 # 放置类道具
 type Placeable @entity {
 	id: ID!
-	rarity: String!
 	imageURL: String!
 	cid: String!
-	skillId: String!
+	coreSkillId: String!
 	skillLevel: String!
+	placeableLands: String!
 }
 
 type Thirdparty @entity {
