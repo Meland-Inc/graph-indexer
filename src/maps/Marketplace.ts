@@ -14,6 +14,7 @@ import { boughtLog, cancelorderLog, createorderLog, updateorderLog } from '../lo
 import { Address } from '@graphprotocol/graph-ts';
 import { buildAcceptedToken } from '../token';
 import * as configs from '../config';
+import { Meland1155LandFuture } from '../generated/entities/NFTStore/Meland1155LandFuture'
 
 export function handleOrderCreated(event: OrderCreated): void {
 	let orderId = event.params.id.toHex();
@@ -49,6 +50,15 @@ export function handleOrderCreated(event: OrderCreated): void {
 	order.supplyQuantity = nftEn.supplyQuantity;
 	order.tokenId = event.params.assetId;
 	order.updatedAt = event.block.timestamp;
+
+	// if vipland future
+	// cancel it if it's not sold
+	if (nftAddress == Address.fromUTF8(configs.Meland1155LandFuture_address)) {
+		let landfutureInstance = Meland1155LandFuture.bind(nftAddress);
+		if (landfutureInstance.claimedById(nftTokenId)) {
+			order.status = OrderStatus_sold;
+		};
+	}
 	order.save();
 
 	createorderLog(event, order);
